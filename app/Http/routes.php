@@ -19,7 +19,6 @@ Route::get('/', function () {
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function($api){
-	$api->get('hello', function(){
-		return "Hello";
-	});
+	//Geolocation
+	$api->resource('geolocations', 'App\Http\Controllers\GeolocationController');
 });
