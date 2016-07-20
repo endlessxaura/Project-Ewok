@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\User;
 use App\Geolocation;
 
 class APITest extends TestCase
@@ -20,35 +21,43 @@ class APITest extends TestCase
 
     //Geolocation testing
     public function testGeolocation(){
+    	$user = factory(User::class)->create();
         $geolocation = factory(Geolocation::class)->create();
 
-    	$this->visit('/api/geolocations')
+    	$this->actingAs($user)
+    		->get('/api/geolocations')
     		->assertResponseOk();
 
-    	$this->get('/api/geolocations', [
+    	$this->actingAs($user)
+    		->get('/api/geolocations', [
     		'center' => ['lat' => $geolocation->latitude, 'long' => $geolocation->longitude],
     		'radius' => 20
     		])
     		->seeJson(['geolocationID' => $geolocation->geolocationID]);
 
-    	$this->post('/api/geolocations', [
+    	$this->actingAs($user)
+    		->post('/api/geolocations', [
     		'latitude' => 87,
     		'longitude' => 96
     		])
     		->assertResponseStatus(201);
 
-    	$this->get('/api/geolocations/' . $geolocation->geolocationID)
+    	$this->actingAs($user)
+    		->get('/api/geolocations/' . $geolocation->geolocationID)
     		->assertResponseOk();
 
-    	$this->get('/api/geolocations/1000')
+    	$this->actingAs($user)
+    		->get('/api/geolocations/1000')
     		->assertResponseStatus(410);
 
-    	$this->put('/api/geolocations/' . $geolocation->geolocationID, [
+    	$this->actingAs($user)
+    		->put('/api/geolocations/' . $geolocation->geolocationID, [
     		'lat' => 50
     		])
     		->assertResponseStatus(400);
 
-    	$this->put('/api/geolocations/' . $geolocation->geolocationID, [
+    	$this->actingAs($user)
+    		->put('/api/geolocations/' . $geolocation->geolocationID, [
     		'latitude' => 50,
     		'longitude' => 50,
     		])

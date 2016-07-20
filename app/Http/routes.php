@@ -19,6 +19,10 @@ Route::get('/', function () {
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function($api){
-	//Geolocation
-	$api->resource('geolocations', 'App\Http\Controllers\GeolocationController');
+	$api->group(['middleware' => 'auth:api'], function($api){
+		$api->resource('geolocations', 'App\Http\Controllers\GeolocationController');
+	});
 });
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
