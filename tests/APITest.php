@@ -8,7 +8,6 @@ use App\Geolocation;
 
 class APITest extends TestCase
 {
-
     /**
      * A basic test example.
      *
@@ -21,46 +20,41 @@ class APITest extends TestCase
 
     //Geolocation testing
     public function testGeolocation(){
-    	$user = factory(User::class)->create();
+    	$this->createAuthenticatedUser();
         $geolocation = factory(Geolocation::class)->create();
 
-    	$this//->actingAs($user)
-    		->get('/api/geolocations')
-    		->assertResponseOk();
+        $this->callAuthenticated('GET', '/api/geolocations')->assertResponseOk();
 
-    	$this//->actingAs($user)
-    		->get('/api/geolocations', [
-    		'center' => ['lat' => $geolocation->latitude, 'long' => $geolocation->longitude],
-    		'radius' => 20
-    		])
-    		->seeJson(['geolocationID' => $geolocation->geolocationID]);
+        $this->callAuthenticated('GET', '/api/geolocations', [
+        	'center' => ['lat' => $geolocation->latitude, 'long' => $geolocation->longitude],
+        	'radius' => 20
+        	])
+        	->seeJson(['geolocationID' => $geolocation->geolocationID]);
 
-    	$this//->actingAs($user)
-    		->post('/api/geolocations', [
-    		'latitude' => 87,
-    		'longitude' => 96
-    		])
-    		->assertResponseStatus(201);
+        $this->callAuthenticated('POST', '/api/geolocations', [
+        	'latitude' => 87,
+        	'longitude' => 96
+        	])
+        	->assertResponseStatus(201);
 
-    	$this//->actingAs($user)
-    		->get('/api/geolocations/' . $geolocation->geolocationID)
-    		->assertResponseOk();
+        $this->callAuthenticated('GET', '/api/geolocations/' . $geolocation->geolocationID)
+        	->assertResponseOk();
 
-    	$this//->actingAs($user)
-    		->get('/api/geolocations/1000')
-    		->assertResponseStatus(410);
+        $this->callAuthenticated('GET', '/api/geolocations/1000')
+        	->assertResponseStatus(410);
 
-    	$this//->actingAs($user)
-    		->put('/api/geolocations/' . $geolocation->geolocationID, [
-    		'lat' => 50
-    		])
-    		->assertResponseStatus(400);
+        $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
+        	'lat' => 50
+        	])
+        	->assertResponseStatus(400);
 
-    	$this//->actingAs($user)
-    		->put('/api/geolocations/' . $geolocation->geolocationID, [
-    		'latitude' => 50,
-    		'longitude' => 50,
-    		])
+        $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
+        	'latitude' => 50,
+        	'longitude' => 50
+        	])
+        	->assertResponseStatus(204);
+
+    	$this->callAuthenticated('DELETE', '/api/geolocations/' . $geolocation->geolocationID)
     		->assertResponseStatus(204);
     }
 }

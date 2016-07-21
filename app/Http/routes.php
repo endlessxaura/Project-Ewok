@@ -27,37 +27,38 @@ $api->version('v1', function($api){
 	$api->post('refreshToken', 'App\Http\Controllers\AuthenticateController@refreshToken');
 
 	//Geolocations
-	$api->group([], function($api){
+	$api->group(['middleware' => 'api.auth'], function($api){
 		$api->resource('geolocations', 'App\Http\Controllers\GeolocationController');
 	});
 
-	$api->group(['middleware' => 'api.auth'], function($api){
-		$api->get('users', function(){
-			return App\User::all();
-		});
+	//This is just my random bullshit
+	// $api->group(['middleware' => 'api.auth'], function($api){
+	// 	$api->get('users', function(){
+	// 		return App\User::all();
+	// 	});
 
-		$api->get('user', function(){
-			try{
-				$user = JWTAuth::parseToken()->toUser();
+	// 	$api->get('user', function(){
+	// 		try{
+	// 			$user = JWTAuth::parseToken()->toUser();
 
-				if(!$user){
-					return $this->response->errorNotFound('User not found');
-				}
-				else{
-					return $user;
-				}
-			}
-			catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $ex){
-				return $this->response->error('token is invalid');
-			}
-			catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $ex){
-				return $this->response->error('token expired');
-			}
-			catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $ex){
-				return $this->response->error('token blacklisted');
-			}
-		});
-	});
+	// 			if(!$user){
+	// 				return $this->response->errorNotFound('User not found');
+	// 			}
+	// 			else{
+	// 				return $user;
+	// 			}
+	// 		}
+	// 		catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $ex){
+	// 			return $this->response->error('token is invalid');
+	// 		}
+	// 		catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $ex){
+	// 			return $this->response->error('token expired');
+	// 		}
+	// 		catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $ex){
+	// 			return $this->response->error('token blacklisted');
+	// 		}
+	// 	});
+	// });
 });
 
 Route::auth();
