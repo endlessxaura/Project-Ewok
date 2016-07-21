@@ -15,20 +15,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('testMap', function(){
+	return view('map', ['token' => JWTAuth::getToken()]);
+});
+
 //API
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function($api){
-	//Authentication
+	/////Authentication/////
 	$api->post('register', 'App\Http\Controllers\AuthenticateController@register');
-
 	$api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
-
 	$api->post('refreshToken', 'App\Http\Controllers\AuthenticateController@refreshToken');
 
+	/////Reading data/////
+
 	//Geolocations
+	$api->get('geolocations', 'App\Http\Controllers\GeolocationController@index');
+	$api->get('geolocations/{id}', 'App\Http\Controllers\GeolocationController@show');
+
+	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
-		$api->resource('geolocations', 'App\Http\Controllers\GeolocationController');
+		$api->post('geolocations', 'App\Http\Controllers\GeolocationController@store');
+		$api->put('geolocations/{id}', 'App\Http\Controllers\GeolocationController@update');
+		$api->delete('geolocations/{id}', 'App\Http\Controllers\GeolocationController@destroy');
 	});
 
 	//This is just my random bullshit

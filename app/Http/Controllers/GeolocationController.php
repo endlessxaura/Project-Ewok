@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Geolocation;
 use App\Http\Requests;
 use App\Http\Controllers\Responses;
+use Illuminate\Http\Response;
 
 class GeolocationController extends Controller
 {
@@ -30,7 +31,22 @@ class GeolocationController extends Controller
             return Geolocation::GetLocationsInRadius($radius, $center, $unit);
         }
         else{
-            return Geolocation::all();
+            $geolocations = Geolocation::all();
+            $features = array();
+            foreach($geolocations as $geolocation){
+                $features[] = [
+                    "type" => "Feature",
+                    "geometry" => ["type" => "Point", "coordinates" => [
+                            $geolocation->longitude, $geolocation->latitude
+                            ]
+                        ],
+                    "properties" => null
+                ];
+            }
+            return response()->json([
+                "type" => "FeatureCollection",
+                "features" => $features
+            ]);
         }
     }
 

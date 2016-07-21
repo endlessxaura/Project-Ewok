@@ -64,7 +64,7 @@ class AuthenticateController extends Controller
     }
 
     public function destroyToken(Request $request){
-        $user = JWTAuth:::parseToken()->authenticate();
+        $user = JWTAuth::parseToken()->authenticate();
         if(!$user){
             $this->response->error('Token is invalid');
         }  
