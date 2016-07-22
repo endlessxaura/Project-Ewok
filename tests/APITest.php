@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
 use App\Geolocation;
+use App\Farm;
 
 class APITest extends TestCase
 {
@@ -29,7 +30,7 @@ class APITest extends TestCase
         	'center' => ['lat' => $geolocation->latitude, 'long' => $geolocation->longitude],
         	'radius' => 20
         	])
-        	->seeJson(['geolocationID' => $geolocation->geolocationID]);
+        	->assertResponseOk();
 
         $this->callAuthenticated('POST', '/api/geolocations', [
         	'latitude' => 87,
@@ -56,5 +57,36 @@ class APITest extends TestCase
 
     	$this->callAuthenticated('DELETE', '/api/geolocations/' . $geolocation->geolocationID)
     		->assertResponseStatus(204);
+    }
+
+    //Farm testing
+    public function testFarm(){
+        $this->createAuthenticatedUser();
+        $geolocation = factory(Geolocation::class)->create();
+        $farm = factory(Farm::class)->create([
+            'geolocationID' => $geolocation->geolocationID
+            ]);
+
+        $this->callAuthenticated('GET', '/api/farms')
+            ->assertResponseOk();
+
+        $this->callAuthenticated('GET', '/api/farms/' . $farm->farmID)
+            ->assertResponseOk();
+
+        $geolocation2 = factory(Geolocation::class)->create();
+        $this->callAuthenticated('POST', '/api/farms', [
+            'geolocationID' => $geolocation2->geolocationID,
+            'name' => 'HelloWorld',
+            'timeOfOperation' => null
+            ])
+            ->assertResponseStatus(201);
+
+        $this->callAuthenticated('PUT', '/api/farms/' . $farm->farmID, [
+            'name' => 'HelloWorld???'
+            ])
+            ->assertResponseStatus(204);
+
+        $this->callAuthenticated('DELETE', '/api/farms/' . $farm->farmID)
+            ->assertResponseStatus(204);
     }
 }

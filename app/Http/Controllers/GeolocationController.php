@@ -23,12 +23,26 @@ class GeolocationController extends Controller
         //      radius = the distance you are looking
         //      unit (default = miles) = the unit you are looking for
         //          m = miles, n = nautical miles, k = kilometers
-        //POST: returns all geopoints
+        //POST: returns all geopoints, in a radius is specified, as a GeoJson
         if($request->input('center') != null){
             $center = $request->input('center');
             $radius = $request->input('radius');
             $unit = $request->input('unit', 'm');
-            return Geolocation::GetLocationsInRadius($radius, $center, $unit);
+            $geolocations = Geolocation::GetLocationsInRadius($radius, $center, $unit);            $features = array();
+            foreach($geolocations as $geolocation){
+                $features[] = [
+                    "type" => "Feature",
+                    "geometry" => ["type" => "Point", "coordinates" => [
+                            $geolocation->longitude, $geolocation->latitude
+                            ]
+                        ],
+                    "properties" => null
+                ];
+            }
+            return response()->json([
+                "type" => "FeatureCollection",
+                "features" => $features
+            ]);
         }
         else{
             $geolocations = Geolocation::all();
@@ -88,10 +102,20 @@ class GeolocationController extends Controller
     public function show($id)
     {
         //PRE: $id must match a geolocationID
-        //POST: returns the geolocation matching the $id
+        //POST: returns the geolocation matching the $id as a GeoJson
         $geolocation = Geolocation::find($id);
         if($geolocation != null){
-            return $geolocation;
+            return response()->json([
+            "type" => "Feature",
+            "geometry" => [
+                "type" => "Point",
+                "coordinates" => [
+                    $geolocation->longitude,
+                    $geolocation->latitude
+                    ]
+                ],
+            "properties" => null
+            ]);
         }
         else{
             return Responses::DoesNotExist('Geolocation');

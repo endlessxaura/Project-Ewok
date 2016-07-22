@@ -12,7 +12,7 @@ class User extends Authenticatable
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['email','password', 'api_token'];
+    protected $fillable = ['email','password'];
 
     //Relationships
 

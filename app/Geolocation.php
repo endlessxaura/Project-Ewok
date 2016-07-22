@@ -1,7 +1,6 @@
 <?php
 
 namespace App;
-use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Geolocation extends Model
@@ -15,8 +14,11 @@ class Geolocation extends Model
     protected $fillable = ['geolocationID', 'latitude', 'longitude'];
 
     //Relationships
+    public function farm(){
+    	return $this->belongsTo('App\Farm', 'geolocationID', 'geolocationID');
+    }
 
-    //Function
+    //Functions
     public static function GetLocationsInRadius($distance, $center, $unit){
     	//PRE: distance is a number; $unit is k for kilometers, n for nautical miles, m for miles
     	//		center is the coordinates for the center as ['lat' => value, 'long' => value]
