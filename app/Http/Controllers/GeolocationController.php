@@ -33,10 +33,11 @@ class GeolocationController extends Controller
                 $features[] = [
                     "type" => "Feature",
                     "geometry" => ["type" => "Point", "coordinates" => [
-                            $geolocation->longitude, $geolocation->latitude
+                            $geolocation->longitude, 
+                            $geolocation->latitude
                             ]
                         ],
-                    "properties" => null
+                    "properties" => $geolocation->information()
                 ];
             }
             return response()->json([
@@ -51,10 +52,11 @@ class GeolocationController extends Controller
                 $features[] = [
                     "type" => "Feature",
                     "geometry" => ["type" => "Point", "coordinates" => [
-                            $geolocation->longitude, $geolocation->latitude
+                            $geolocation->longitude, 
+                            $geolocation->latitude
                             ]
                         ],
-                    "properties" => null
+                    "properties" => $geolocation->information()
                 ];
             }
             return response()->json([
@@ -89,6 +91,7 @@ class GeolocationController extends Controller
         $geolocation = new Geolocation;
         $geolocation->latitude = $request->input('latitude');
         $geolocation->longitude = $request->input('longitude');
+        $geolocation->locationType = $request->input('locationType');
         $geolocation->save();
         return Responses::Created();
     }
@@ -114,7 +117,7 @@ class GeolocationController extends Controller
                     $geolocation->latitude
                     ]
                 ],
-            "properties" => null
+            "properties" => $geolocation->information()
             ]);
         }
         else{
@@ -152,6 +155,7 @@ class GeolocationController extends Controller
             if($geolocation != null){
                 $geolocation->latitude = $lat;
                 $geolocation->longitude = $long;
+                $geolocation->locationType = $request->input('locationType', $geolocation->locationType);
                 $geolocation->save();
                 return Responses::Updated();
             }

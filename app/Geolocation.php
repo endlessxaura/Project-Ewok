@@ -11,7 +11,7 @@ class Geolocation extends Model
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['geolocationID', 'latitude', 'longitude'];
+    protected $fillable = ['geolocationID', 'latitude', 'longitude', 'locationType'];
 
     //Relationships
     public function farm(){
@@ -76,4 +76,16 @@ class Geolocation extends Model
 	        return $miles;
 	    }
 	}
+
+    public function information(){
+        //POST: Returns information based on the type of location it is
+        //NOTE: This part is not modular. Remove this when exporting to a new project
+        if($this->locationType == 'farm'){
+            $farm = $this->farm;
+            $information = array();
+            $information['name'] = $farm->name;
+            $information['timeOfOperation'] = $farm->timeOfOperation;
+            return $information;
+        }
+    }
 }

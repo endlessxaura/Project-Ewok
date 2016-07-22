@@ -62,7 +62,9 @@ class APITest extends TestCase
     //Farm testing
     public function testFarm(){
         $this->createAuthenticatedUser();
-        $geolocation = factory(Geolocation::class)->create();
+        $geolocation = factory(Geolocation::class)->create([
+            'locationType' => 'Farm'
+            ]);
         $farm = factory(Farm::class)->create([
             'geolocationID' => $geolocation->geolocationID
             ]);
@@ -73,7 +75,9 @@ class APITest extends TestCase
         $this->callAuthenticated('GET', '/api/farms/' . $farm->farmID)
             ->assertResponseOk();
 
-        $geolocation2 = factory(Geolocation::class)->create();
+        $geolocation2 = factory(Geolocation::class)->create([
+            'locationType' => 'Farm'
+            ]);
         $this->callAuthenticated('POST', '/api/farms', [
             'geolocationID' => $geolocation2->geolocationID,
             'name' => 'HelloWorld',
