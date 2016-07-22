@@ -19,7 +19,12 @@ class FarmController extends Controller
     public function index()
     {
         //POST: Returns all farms, including their geolocation
-        $farms = Farm::all();
+        if($request->has('name'){
+            $farms = Farm::where('name', '=', $request->input('name'))->get();
+        }
+        else{
+            $farms = Farm::all();
+        }
         foreach($farms as $farm){
             $farm->geolocation;
         }

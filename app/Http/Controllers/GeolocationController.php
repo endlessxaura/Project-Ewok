@@ -19,16 +19,19 @@ class GeolocationController extends Controller
     {
         //PRE: The request 'center' input is optional, but if it is there!
         //      request MUST have the following
-        //      center = the center of focus for looking as ['lat' => value, 'long' => value]
+        //      latitude = the latitude of the center
+        //      longitude = the longitude of the center
         //      radius = the distance you are looking
         //      unit (default = miles) = the unit you are looking for
         //          m = miles, n = nautical miles, k = kilometers
         //POST: returns all geopoints, in a radius is specified, as a GeoJson
-        if($request->input('center') != null){
-            $center = $request->input('center');
+        if($request->input('radius') != null){
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
             $radius = $request->input('radius');
             $unit = $request->input('unit', 'm');
-            $geolocations = Geolocation::GetLocationsInRadius($radius, $center, $unit);            $features = array();
+            $geolocations = Geolocation::GetLocationsInRadius($radius, ['lat' => $latitude, 'long' => $longitude], $unit);            
+            $features = array();
             foreach($geolocations as $geolocation){
                 $features[] = [
                     "type" => "Feature",

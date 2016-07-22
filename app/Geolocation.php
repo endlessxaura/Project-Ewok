@@ -79,10 +79,13 @@ class Geolocation extends Model
 
     public function information(){
         //POST: Returns information based on the type of location it is
+        //      location types allowed:
+        //      farm
         //NOTE: This part is not modular. Remove this when exporting to a new project
         if($this->locationType == 'farm'){
             $farm = $this->farm;
             $information = array();
+            $information['locationType'] = "farm";
             $information['name'] = $farm->name;
             $information['timeOfOperation'] = $farm->timeOfOperation;
             return $information;

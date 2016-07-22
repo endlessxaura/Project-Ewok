@@ -24,6 +24,9 @@
             margin-right: 6px;
         }
     </style>
+
+    <!-- Javascript -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZfZOGOqDInUkTnjT88zygrOJC6xBjqco&callback=initMap" async defer></script>
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top">
@@ -40,15 +43,12 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Project Crowdsource
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
-                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -72,7 +72,22 @@
         </div>
     </nav>
 
+    <style>
+        #sidebar {
+            width: 33.333%;
+            float: left;
+            height: 100%;
+            font-size: 200%;
+        }
+    </style>
+
+    <div id="sidebar">
+        @yield('sidebar')
+    </div>
+
     @yield('content')
+
+
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>

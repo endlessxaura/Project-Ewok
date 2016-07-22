@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('testMap', function(){
-	return view('map', ['token' => JWTAuth::getToken()]);
-});
-
 //API
 $api = app('Dingo\Api\Routing\Router');
 
