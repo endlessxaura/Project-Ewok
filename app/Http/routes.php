@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 // Route::post('upload', '\App\Http\Controllers\PictureController@store');
 
-//API  
+//API
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function($api){
