@@ -85,9 +85,11 @@ class Geolocation extends Model
         if($this->locationType == 'farm'){
             $farm = $this->farm;
             $information = array();
+            $information['ID'] = $farm->farmID;
             $information['locationType'] = "farm";
             $information['name'] = $farm->name;
-            $information['timeOfOperation'] = $farm->timeOfOperation;
+            $information['openingTime'] = $farm->openingTime;
+            $information['closingTime'] = $farm->closingTime;
             return $information;
         }
     }

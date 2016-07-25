@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Test routes
+Route::get('upload', function() {
+  return view('upload');
+});
+
+Route::post('upload', '\App\Http\Controllers\PictureController@store');
+
 //API
 $api = app('Dingo\Api\Routing\Router');
 
@@ -34,6 +41,10 @@ $api->version('v1', function($api){
 	$api->get('farms', 'App\Http\Controllers\FarmController@index');
 	$api->get('farms/{id}', 'App\Http\Controllers\FarmController@show');
 
+	//Pictures
+	$api->get('pictures', 'App\Http\Controllers\PictureController@index');
+	$api->get('pictures/{id}', 'App\Http\Controllers\PictureController@show');
+
 	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
 
@@ -46,6 +57,9 @@ $api->version('v1', function($api){
 		$api->post('farms', 'App\Http\Controllers\FarmController@store');
 		$api->put('farms/{id}', 'App\Http\Controllers\FarmController@update');
 		$api->delete('farms/{id}', 'App\Http\Controllers\FarmController@destroy');
+	
+		//Pictures
+		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
 	});
 
 	//This is just my random bullshit

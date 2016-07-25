@@ -19,7 +19,7 @@ class FarmController extends Controller
     public function index()
     {
         //POST: Returns all farms, including their geolocation
-        if($request->has('name'){
+        if($request->has('name')){
             $farms = Farm::where('name', '=', $request->input('name'))->get();
         }
         else{
@@ -59,7 +59,8 @@ class FarmController extends Controller
             $farm = new Farm;
             $farm->geolocationID = $request->input('geolocationID');
             $farm->name = $request->input('name');
-            $farm->timeOfOperation = $request->input('timeOfOperation', null);
+            $farm->openingTime = $request->input('openingTime', null);
+            $farm->closingTime = $request->input('closingTime', null);
             $farm->save();
             return Responses::Created();
         }
@@ -118,7 +119,8 @@ class FarmController extends Controller
         if($farm != null){
             $farm->geolocationID = $request->input('geolocationID', $farm->geolocationID);
             $farm->name = $request->input('name', $farm->name);
-            $farm->timeOfOperation = $request->input('timeOfOperation', $farm->timeOfOperation);
+            $farm->openingTime = $request->input('openingTime', $farm->openingTime);
+            $farm->closingTime = $request->input('closingTime', $farm->closingTime);
             $farm->save();
             return Responses::Updated();
         }

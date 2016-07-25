@@ -27,6 +27,7 @@
 
     <!-- Javascript -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZfZOGOqDInUkTnjT88zygrOJC6xBjqco&callback=initMap" async defer></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top">
