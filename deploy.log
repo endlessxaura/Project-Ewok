@@ -1,0 +1,265 @@
+2016-07-25 19:33:52
+==============================
+*** ALERT ***
+Failed attempt to access deployment script!
+
+MESSAGE: Auth key doesn't match
+
+Array
+(
+    [HTTP_HOST] => localhost:8888
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_REFERER] => http://localhost:8888/Project-Ewok/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_COOKIE] => SQLiteManager_currentLangue=2; laravel_session=eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0%3D
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zh DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 8888
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Applications/MAMP/htdocs/Project-Ewok/deploy.php
+    [REMOTE_PORT] => 54405
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /Project-Ewok/deploy.php
+    [SCRIPT_NAME] => /Project-Ewok/deploy.php
+    [PHP_SELF] => /Project-Ewok/deploy.php
+    [REQUEST_TIME_FLOAT] => 1469468032.32
+    [REQUEST_TIME] => 1469468032
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+    [SQLiteManager_currentLangue] => 2
+    [laravel_session] => eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0=
+)
+
+
+
+2016-07-25 19:35:47
+==============================
+*** ALERT ***
+Failed attempt to access deployment script!
+
+MESSAGE: Auth key doesn't match
+
+Array
+(
+    [HTTP_HOST] => localhost:8888
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_REFERER] => http://localhost:8888/Project-Ewok/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_COOKIE] => SQLiteManager_currentLangue=2; laravel_session=eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0%3D
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zh DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 8888
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Applications/MAMP/htdocs/Project-Ewok/deploy.php
+    [REMOTE_PORT] => 54408
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /Project-Ewok/deploy.php
+    [SCRIPT_NAME] => /Project-Ewok/deploy.php
+    [PHP_SELF] => /Project-Ewok/deploy.php
+    [REQUEST_TIME_FLOAT] => 1469468147.69
+    [REQUEST_TIME] => 1469468147
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+    [SQLiteManager_currentLangue] => 2
+    [laravel_session] => eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0=
+)
+
+
+
+2016-07-25 19:36:48
+==============================
+*** ALERT ***
+Failed attempt to access deployment script!
+
+MESSAGE: Auth key doesn't match
+
+Array
+(
+    [HTTP_HOST] => localhost:8888
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_REFERER] => http://localhost:8888/Project-Ewok/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_COOKIE] => SQLiteManager_currentLangue=2; laravel_session=eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0%3D
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zh DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 8888
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Applications/MAMP/htdocs/Project-Ewok/deploy.php
+    [REMOTE_PORT] => 54417
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /Project-Ewok/deploy.php
+    [SCRIPT_NAME] => /Project-Ewok/deploy.php
+    [PHP_SELF] => /Project-Ewok/deploy.php
+    [REQUEST_TIME_FLOAT] => 1469468208.5
+    [REQUEST_TIME] => 1469468208
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+    [SQLiteManager_currentLangue] => 2
+    [laravel_session] => eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0=
+)
+
+
+
+2016-07-25 19:39:18
+==============================
+*** ALERT ***
+Failed attempt to access deployment script!
+
+MESSAGE: Auth key doesn't match
+
+Array
+(
+    [HTTP_HOST] => localhost:8888
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_REFERER] => http://localhost:8888/Project-Ewok/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_COOKIE] => SQLiteManager_currentLangue=2; laravel_session=eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0%3D
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zh DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 8888
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Applications/MAMP/htdocs/Project-Ewok/deploy.php
+    [REMOTE_PORT] => 54435
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /Project-Ewok/deploy.php
+    [SCRIPT_NAME] => /Project-Ewok/deploy.php
+    [PHP_SELF] => /Project-Ewok/deploy.php
+    [REQUEST_TIME_FLOAT] => 1469468358.11
+    [REQUEST_TIME] => 1469468358
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+    [SQLiteManager_currentLangue] => 2
+    [laravel_session] => eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0=
+)
+
+
+
+2016-07-25 19:39:23
+==============================
+*** ALERT ***
+Failed attempt to access deployment script!
+
+MESSAGE: $_POST["payload"] is not set
+
+Array
+(
+    [HTTP_HOST] => localhost:8888
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, sdch
+    [HTTP_ACCEPT_LANGUAGE] => en-US,en;q=0.8
+    [HTTP_COOKIE] => SQLiteManager_currentLangue=2; laravel_session=eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0%3D
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zh DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0
+    [SERVER_NAME] => localhost
+    [SERVER_ADDR] => ::1
+    [SERVER_PORT] => 8888
+    [REMOTE_ADDR] => ::1
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Applications/MAMP/htdocs/Project-Ewok/deploy.php
+    [REMOTE_PORT] => 54438
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [REQUEST_METHOD] => GET
+    [QUERY_STRING] => auth=helloWorld
+    [REQUEST_URI] => /Project-Ewok/deploy.php?auth=helloWorld
+    [SCRIPT_NAME] => /Project-Ewok/deploy.php
+    [PHP_SELF] => /Project-Ewok/deploy.php
+    [REQUEST_TIME_FLOAT] => 1469468363.6
+    [REQUEST_TIME] => 1469468363
+    [argv] => Array
+        (
+            [0] => auth=helloWorld
+        )
+
+    [argc] => 1
+)
+Array
+(
+    [auth] => helloWorld
+    [SQLiteManager_currentLangue] => 2
+    [laravel_session] => eyJpdiI6Im1pMkI4XC9zZ0FnbFJObmt5K3ZoUDlnPT0iLCJ2YWx1ZSI6IlVoMWViMkVVMDFPMFMwXC9LTnVTVnhRM1wvV0NnU2dIVnJiUHlhbVhmMGF5XC96ajM4MTkwNUZmRkZtVHAycDI0RlllZlBYVTR2VkFNdnZGOU9TazJJNmtBPT0iLCJtYWMiOiI3MWMwYzM2MzkyNmY5ZjE4ODQyMGU5Zjg0MTZlYjA4N2I3NDYwYWZjM2E1NTdkYTJlY2QwZDE4Y2UxMzY4YTk1In0=
+)
+
+
+

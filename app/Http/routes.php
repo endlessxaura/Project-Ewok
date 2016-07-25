@@ -16,11 +16,11 @@ Route::get('/', function () {
 });
 
 //Test routes
-Route::get('upload', function() {
-  return view('upload');
-});
+// Route::get('upload', function() {
+//   return view('upload');
+// });
 
-Route::post('upload', '\App\Http\Controllers\PictureController@store');
+// Route::post('upload', '\App\Http\Controllers\PictureController@store');
 
 //API
 $api = app('Dingo\Api\Routing\Router');
@@ -60,6 +60,8 @@ $api->version('v1', function($api){
 	
 		//Pictures
 		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
+		$api->put('pictures/{id}', 'App\Http\Controllers\PictureController@update');
+		$api->delete('pictures/{id}', 'App\Http\Controllers\PictureController@delete');
 	});
 
 	//This is just my random bullshit

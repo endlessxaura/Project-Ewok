@@ -81,7 +81,8 @@ class APITest extends TestCase
         $this->callAuthenticated('POST', '/api/farms', [
             'geolocationID' => $geolocation2->geolocationID,
             'name' => 'HelloWorld',
-            'timeOfOperation' => null
+            'openingTime' => null,
+            'closingTime' => null
             ])
             ->assertResponseStatus(201);
 
@@ -93,4 +94,7 @@ class APITest extends TestCase
         $this->callAuthenticated('DELETE', '/api/farms/' . $farm->farmID)
             ->assertResponseStatus(204);
     }
+
+    //NOTE: PICTURES DO NOT HAVE A TESTER BECAUSE YOU CAN'T WITH LARAVEL
+    //TO TEST THESE, USE THE TESTING ROUTES (which are commented out)
 }

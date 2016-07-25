@@ -16,7 +16,7 @@ class FarmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //POST: Returns all farms, including their geolocation
         if($request->has('name')){

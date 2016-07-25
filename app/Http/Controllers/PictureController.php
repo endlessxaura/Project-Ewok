@@ -129,7 +129,17 @@ class PictureController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $picture = Picture::find($id);
+        if($picture != null){
+            $picture->attachedItem = $request->input('attachedItem', $picture->attachedItem);
+            $picture->attachedID = $request->input('attachedID', $picture->attachedID);
+            $picture->filePath = $request->input('filePath', $picture->filePath);
+            $picture->save();
+            return Responses::Updated();
+        }
+        else{
+            return Responses::DoesNotExist();
+        }
     }
 
     /**
@@ -140,6 +150,13 @@ class PictureController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $picture = Picture::find($id);
+        if($picture != null){
+            $picture->delete();
+            return Responses::Updated();
+        }
+        else{
+            return Responses::DoesNotExist();
+        }
     }
 }

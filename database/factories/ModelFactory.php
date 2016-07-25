@@ -14,7 +14,8 @@
 $factory->define(App\Farm::class, function (Faker\Generator $faker) {
 	return [
 		'name' => $faker->name,
-		'timeOfOperation' => $faker->time
+		'openingTime' => $faker->time,
+		'closingTime' => $faker->time
 	];
 });
 
