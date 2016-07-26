@@ -10,11 +10,51 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+session_start();
+use Illuminate\Http\Request;
+
+
+$dispatcher = app('Dingo\Api\Dispatcher');
 
 Route::get('/', function () {
+	echo $_SESSION['token'];
+	if($_SESSION['token'] != null){
+		return response()->view('welcome')
+			->header('Authorization', 'Bearer ' . $_SESSION['token']);
+	}
     return view('welcome');
 });
 
+Route::get('login', function(){
+	return view('auth.login');
+});
+
+Route::post('login', function(Request $request) use ($dispatcher){
+	$response = $dispatcher
+		->with([
+			'email' => $request->input('email'),
+			'password' => $request->input('password')
+		])
+		->post('api/authenticate');
+	$token = $response['token'];
+	$_SESSION['token'] = $token;
+	return redirect('/');
+});
+
+Route::get('register', function(){
+	return view('auth.register');
+});
+
+Route::post('register', function(Request $request) use ($dispatcher){
+	$dispatcher
+		->with([
+			'email' => $request->input('email'),
+			'password' => $request->input('password'),
+			'password_confirmation' => $request->input('password_confirmation')
+		])
+		->post('api/register');
+	return redirect('/');
+});
 //Test routes
 // Route::get('upload', function() {
 //   return view('upload');
@@ -93,7 +133,3 @@ $api->version('v1', function($api){
 	// 	});
 	// });
 });
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

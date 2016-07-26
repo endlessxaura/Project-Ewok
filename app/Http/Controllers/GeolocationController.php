@@ -90,6 +90,7 @@ class GeolocationController extends Controller
         //PRE: request should contain the following
         //      latitude
         //      longitude
+        //      locationType
         //POST: Stores the specified geolocation in the DB
         $geolocation = new Geolocation;
         $geolocation->latitude = $request->input('latitude');
