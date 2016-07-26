@@ -16,12 +16,9 @@ use Illuminate\Http\Request;
 
 $dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+	return $request;
 	echo $_SESSION['token'];
-	if($_SESSION['token'] != null){
-		return response()->view('welcome')
-			->header('Authorization', 'Bearer ' . $_SESSION['token']);
-	}
     return view('welcome');
 });
 
@@ -37,8 +34,8 @@ Route::post('login', function(Request $request) use ($dispatcher){
 		])
 		->post('api/authenticate');
 	$token = $response['token'];
-	$_SESSION['token'] = $token;
-	return redirect('/');
+	$_SESSION['token'];
+	return redirect('/')->withCookie("token", $token, 60)->header('Authorization', $token);
 });
 
 Route::get('register', function(){
