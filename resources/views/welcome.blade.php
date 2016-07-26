@@ -6,7 +6,7 @@
       <h2>No place selected</h2>
     </div>
     <div id="sidebarForm">    
-      @if (JWTAuth::getToken() == null)
+<!--       @if (JWTAuth::getToken() == null)
         Login to create a new place!
       @else
         <form id="creationForm" onsubmit="return false">
@@ -18,44 +18,44 @@
           Closing time: <input type="time" class="lastInput" name="closingTime"><br>
           <input type="submit">
         </form>
-      @endif
+      @endif -->
     </div>
   </center>
   <script>
-    @if (JWTAuth::getToken() == null)
-    @else
-    $("#creationForm").submit(function(event){
-      var data = $("#creationForm").serializeArray();
-      // var geolocationData = [];
-      // var farmData = [];
-      var geolocationData = "{";
-      var farmData = "{";
-      for(var i = 0; i < data.length; i++){
-        if(data[i].name == "latitude" || data[i].name == "longitude" || data[i].name == "locationType"){
-          // geolocationData.push(data[i]);
-          geolocationData += '"' + data[i].name + '":' data[i].value + ",";
-        }
-        else{
-          // farmData.push(data[i]);
-          farmData += '"' + data[i].name + '":' data[i].value + ",";
-        }
-      }
-      geolocationData += "}";
-      farmData += "}";
-      console.log(data);
-      console.log(geolocationData);
-      console.log(farmData);
-      $.ajax({
-        type: "POST",
-        url: "{{url('api/geolocations')}}",
-        contentType: 'application/json',
-        headers: {
-          Authorization: "Bearer {{JWTAuth::getToken()}}"
-        },
-        data: JSON.stringify(geolocationData)
-      });
-    });
-    @endif
+    // @if (JWTAuth::getToken() == null)
+    // @else
+    // $("#creationForm").submit(function(event){
+    //   var data = $("#creationForm").serializeArray();
+    //   // var geolocationData = [];
+    //   // var farmData = [];
+    //   var geolocationData = "{";
+    //   var farmData = "{";
+    //   for(var i = 0; i < data.length; i++){
+    //     if(data[i].name == "latitude" || data[i].name == "longitude" || data[i].name == "locationType"){
+    //       // geolocationData.push(data[i]);
+    //       geolocationData += '"' + data[i].name + '":' data[i].value + ",";
+    //     }
+    //     else{
+    //       // farmData.push(data[i]);
+    //       farmData += '"' + data[i].name + '":' data[i].value + ",";
+    //     }
+    //   }
+    //   geolocationData += "}";
+    //   farmData += "}";
+    //   console.log(data);
+    //   console.log(geolocationData);
+    //   console.log(farmData);
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "{{url('api/geolocations')}}",
+    //     contentType: 'application/json',
+    //     headers: {
+    //       Authorization: "Bearer {{JWTAuth::getToken()}}"
+    //     },
+    //     data: JSON.stringify(geolocationData)
+    //   });
+    // });
+    // @endif
   </script>
 @endsection
 
@@ -110,8 +110,8 @@
           var hiddenInput = 
             '<input type="hidden" name="latitude" value=' + event.latLng.lat() + ">" +
             '<input type="hidden" name="longitude" value=' + event.latLng.lng() + ">";
-          $("#sidebarForm").prepend(html);
-          $(".lastInput").after(hiddenInput);
+          // $("#sidebarForm").prepend(html);
+          // $(".lastInput").after(hiddenInput);
           $("#sidebarForm").show();
           $("#sidebarInfo").hide();
         });
