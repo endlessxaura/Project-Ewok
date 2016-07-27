@@ -18,6 +18,10 @@ class Geolocation extends Model
     	return $this->belongsTo('App\Farm', 'geolocationID', 'geolocationID');
     }
 
+    public function reviews(){
+        return $this->hasMany('App\Review', 'geolocationID', 'geolocationID');
+    }
+
     //Functions
     public static function GetLocationsInRadius($distance, $center, $unit){
     	//PRE: distance is a number; $unit is k for kilometers, n for nautical miles, m for miles
@@ -82,15 +86,16 @@ class Geolocation extends Model
         //      location types allowed:
         //      farm
         //NOTE: This part is not modular. Remove this when exporting to a new project
+        $information = array();
         if($this->locationType == 'farm'){
             $farm = $this->farm;
-            $information = array();
-            $information['ID'] = $farm->farmID;
+            $information['farmID'] = $farm->farmID;
             $information['locationType'] = "farm";
             $information['name'] = $farm->name;
             $information['openingTime'] = $farm->openingTime;
             $information['closingTime'] = $farm->closingTime;
-            return $information;
         }
+        $information['geolocationID'] = $this->geolocationID;
+        return $information;
     }
 }

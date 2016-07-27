@@ -15,6 +15,9 @@ class User extends Authenticatable
     protected $fillable = ['email','password'];
 
     //Relationships
+    public function reviews(){
+    	return $this->hasMany('App\Review', 'userID', 'userID');
+    }
 
     //Functions
     

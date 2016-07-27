@@ -18,6 +18,7 @@ class GeolocationController extends Controller
     public function index(Request $request)
     {
         //PRE: The request 'center' input is optional, but if it is there!
+        //      You may also specify, in the URL, GeoJSON = 0 to make it return just the object
         //      request MUST have the following
         //      latitude = the latitude of the center
         //      longitude = the longitude of the center
@@ -25,47 +26,59 @@ class GeolocationController extends Controller
         //      unit (default = miles) = the unit you are looking for
         //          m = miles, n = nautical miles, k = kilometers
         //POST: returns all geopoints, in a radius is specified, as a GeoJson
+        //NOTE: This can take a long time, especially if you aren't using a center
+        //      Make sure to load this asynchronously to avoid significant lag
         if($request->input('radius') != null){
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
             $radius = $request->input('radius');
             $unit = $request->input('unit', 'm');
             $geolocations = Geolocation::GetLocationsInRadius($radius, ['lat' => $latitude, 'long' => $longitude], $unit);            
-            $features = array();
-            foreach($geolocations as $geolocation){
-                $features[] = [
-                    "type" => "Feature",
-                    "geometry" => ["type" => "Point", "coordinates" => [
-                            $geolocation->longitude, 
-                            $geolocation->latitude
-                            ]
-                        ],
-                    "properties" => $geolocation->information()
-                ];
+            if($request->input('GeoJSON', 1)){
+                $features = array();
+                foreach($geolocations as $geolocation){
+                    $features[] = [
+                        "type" => "Feature",
+                        "geometry" => ["type" => "Point", "coordinates" => [
+                                $geolocation->longitude, 
+                                $geolocation->latitude
+                                ]
+                            ],
+                        "properties" => $geolocation->information()
+                    ];
+                }
+                return response()->json([
+                    "type" => "FeatureCollection",
+                    "features" => $features
+                ]);
             }
-            return response()->json([
-                "type" => "FeatureCollection",
-                "features" => $features
-            ]);
+            else{
+                return $geolocations;
+            }
         }
         else{
             $geolocations = Geolocation::all();
-            $features = array();
-            foreach($geolocations as $geolocation){
-                $features[] = [
-                    "type" => "Feature",
-                    "geometry" => ["type" => "Point", "coordinates" => [
-                            $geolocation->longitude, 
-                            $geolocation->latitude
-                            ]
-                        ],
-                    "properties" => $geolocation->information()
-                ];
+            if($request->input('GeoJSON', 1)){
+                $features = array();
+                foreach($geolocations as $geolocation){
+                    $features[] = [
+                        "type" => "Feature",
+                        "geometry" => ["type" => "Point", "coordinates" => [
+                                $geolocation->longitude, 
+                                $geolocation->latitude
+                                ]
+                            ],
+                        "properties" => $geolocation->information()
+                    ];
+                }
+                return response()->json([
+                    "type" => "FeatureCollection",
+                    "features" => $features
+                ]);            
             }
-            return response()->json([
-                "type" => "FeatureCollection",
-                "features" => $features
-            ]);
+            else{
+                return $geolocations;
+            }
         }
     }
 
@@ -106,23 +119,29 @@ class GeolocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         //PRE: $id must match a geolocationID
+        //      request may also specify GeoJSON = 0 to return just the object
         //POST: returns the geolocation matching the $id as a GeoJson
         $geolocation = Geolocation::find($id);
         if($geolocation != null){
-            return response()->json([
-            "type" => "Feature",
-            "geometry" => [
-                "type" => "Point",
-                "coordinates" => [
-                    $geolocation->longitude,
-                    $geolocation->latitude
-                    ]
-                ],
-            "properties" => $geolocation->information()
-            ]);
+            if($request->input('GeoJSON', 1)){
+                return response()->json([
+                "type" => "Feature",
+                "geometry" => [
+                    "type" => "Point",
+                    "coordinates" => [
+                        $geolocation->longitude,
+                        $geolocation->latitude
+                        ]
+                    ],
+                "properties" => $geolocation->information()
+                ]);
+            }
+            else{
+                return $geolocation;
+            }
         }
         else{
             return Responses::DoesNotExist('Geolocation');

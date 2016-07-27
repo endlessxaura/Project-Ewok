@@ -8,6 +8,7 @@ use App\Geolocation;
 use App\Http\Requests;
 use App\Http\Controllers\Responses;
 use Illuminate\Http\Response;
+use Schema;
 
 class FarmController extends Controller
 {
@@ -53,6 +54,7 @@ class FarmController extends Controller
         //      geolocationID
         //      name
         //      timeOfOperation
+        //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)
         //POST: stores the farm in the database with the specified data
         $geolocation = Geolocation::find($request->input('geolocationID'));
         if($geolocation != null){
@@ -61,6 +63,27 @@ class FarmController extends Controller
             $farm->name = $request->input('name');
             $farm->openingTime = $request->input('openingTime', null);
             $farm->closingTime = $request->input('closingTime', null);
+
+            //Updating each crop
+            $columns = Schema::getColumnListing('farm');
+            for($i = 7; $i < sizeof($columns); $i++){
+                $farm[$columns[$i]] = $request->input($columns[$i], 0);
+            }
+            // $farm->apples = $request->input('apples', 0);
+            // $farm->corn = $request->input('corn', 0);
+            // $farm->wheat = $request->input('wheat', 0);
+            // $farm->lettuce = $request->input('lettuce', 0);
+            // $farm->chickens = $request->input('chickens', 0);
+            // $farm->cows = $request->input('cows', 0);
+            // $farm->pigs = $request->input('pigs', 0);
+            // $farm->tomatoes = $request->input('tomatoes', 0);
+            // $farm->soybean = $request->input('soybean', 0);
+            // $farm->potatoes = $request->input('potatoes', 0);
+            // $farm->grapes = $request->input('grapes', 0);
+            // $farm->bananas = $request->input('bananas', 0);
+            // $farm->
+
+            //Saving
             $farm->save();
             return Responses::Created();
         }
@@ -121,6 +144,14 @@ class FarmController extends Controller
             $farm->name = $request->input('name', $farm->name);
             $farm->openingTime = $request->input('openingTime', $farm->openingTime);
             $farm->closingTime = $request->input('closingTime', $farm->closingTime);
+            
+            //Updating each crop
+            $columns = Schema::getColumnListing('farm');
+            for($i = 7; $i < sizeof($columns); $i++){
+                $farm[$columns[$i]] = $request->input($columns[$i], 0);
+            }
+
+            //Saving
             $farm->save();
             return Responses::Updated();
         }

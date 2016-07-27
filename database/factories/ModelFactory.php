@@ -32,3 +32,10 @@ $factory->define(App\Geolocation::class, function (Faker\Generator $faker) {
 		'longitude' => $faker->longitude
 	];
 });
+
+$factory->define(App\Review::class, function (Faker\Generator $faker) {
+	return [
+		'comment' => $faker->sentence,
+		'vote' => $faker->numberBetween(-1, 1)
+	];
+});

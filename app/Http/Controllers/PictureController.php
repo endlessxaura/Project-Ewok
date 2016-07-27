@@ -129,13 +129,44 @@ class PictureController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //PRE: $request may have the following
+        //      attachedItem
+        //      attachedID
+        //      filePath
+        //      image
+        //POST: Updates the picture with the specified information
         $picture = Picture::find($id);
-        if($picture != null){
-            $picture->attachedItem = $request->input('attachedItem', $picture->attachedItem);
-            $picture->attachedID = $request->input('attachedID', $picture->attachedID);
-            $picture->filePath = $request->input('filePath', $picture->filePath);
-            $picture->save();
-            return Responses::Updated();
+        if($picture != null){            
+            //Checking for image
+            $file = $request->file('image', null);
+            if($file != null){   
+                //Updating information
+                $picture->attachedItem = $request->input('attachedItem', $picture->attachedItem);
+                $picture->attachedID = $request->input('attachedID', $picture->attachedID);
+                $attachedItem = $picture->getAttached();
+                $fileName = $picture->attachedItem . '/' . $attachedItem->name . '/' . $file->getClientOriginalName();
+                $picture->filePath = "../storage/app/" . $fileName;
+                
+                //Storing new image         
+                Storage::put(
+                $fileName,
+                File::get($file)
+                );
+
+                //Deleting old image
+                $filePath = $picture->filePath;
+                $directoryStructure = explode('/', $filePath);
+                $deletedFile = $directoryStructure[3] . '/' . $directoryStructure[4] . '/' . $directoryStructure[5];
+                Storage::delete($deletedFile);            
+
+                //Saving and returning
+                $picture->save();
+                return Responses::Updated();
+            }
+            else{
+                return Responses::BadRequest();
+            }
+
         }
         else{
             return Responses::DoesNotExist();
@@ -150,6 +181,7 @@ class PictureController extends Controller
      */
     public function destroy($id)
     {
+        //POST: Deletes the picture matching ID
         $picture = Picture::find($id);
         if($picture != null){
             $picture->delete();

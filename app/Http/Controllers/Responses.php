@@ -6,15 +6,15 @@ use Illuminate\Http\Response;
 
 class Responses{
 	public static function NotAuthenticated(){
-		return new Response('User is not authenticated', 401);
+		return new Response(['error' => 'User is not authenticated'], 401);
 	}
 
 	public static function PermissionDenied(){
-		return new Response('User is not permitted', 403);
+		return new Response(['error' => 'User is not permitted'], 403);
 	}
 
 	public static function Created($id = 0){
-		return new Response(['ID' => $id], 201);
+		return new Response(['message' => 'The object was created', 'ID' => $id], 201);
 	}
 
 	public static function Updated(){
@@ -22,14 +22,14 @@ class Responses{
 	}
 
 	public static function DoesNotExist($object = 'The object'){
-		return new Response($object . ' does not exist', 410);
+		return new Response(['error' => $object . ' does not exist'], 410);
 	}
 
 	public static function BadRequest(){
-		return new Response('Bad request', 400);
+		return new Response(['error' => 'Bad request'], 400);
 	}
 
 	public static function AlreadyExists($object = 'The object'){
-		return new Response($object . ' already exists', 409);
+		return new Response(['error' => $object . ' already exists'], 409);
 	}
 }

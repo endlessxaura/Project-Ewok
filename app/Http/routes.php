@@ -10,48 +10,53 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-session_start();
-use Illuminate\Http\Request;
+
+//Semi-broken webroutes
+// if(!isset($_SESSION)){
+// 	session_start();
+// }
+// use Illuminate\Http\Request;
 
 
-$dispatcher = app('Dingo\Api\Dispatcher');
+// $dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::get('/', function (Request $request) {
-	return $request;
-	echo $_SESSION['token'];
-    return view('welcome');
-});
+// Route::get('/', function (Request $request) {
+// 	return $request;
+// 	echo $_SESSION['token'];
+//     return view('welcome');
+// });
 
-Route::get('login', function(){
-	return view('auth.login');
-});
+// Route::get('login', function(){
+// 	return view('auth.login');
+// });
 
-Route::post('login', function(Request $request) use ($dispatcher){
-	$response = $dispatcher
-		->with([
-			'email' => $request->input('email'),
-			'password' => $request->input('password')
-		])
-		->post('api/authenticate');
-	$token = $response['token'];
-	$_SESSION['token'];
-	return redirect('/')->withCookie("token", $token, 60)->header('Authorization', $token);
-});
+// Route::post('login', function(Request $request) use ($dispatcher){
+// 	$response = $dispatcher
+// 		->with([
+// 			'email' => $request->input('email'),
+// 			'password' => $request->input('password')
+// 		])
+// 		->post('api/authenticate');
+// 	$token = $response['token'];
+// 	$_SESSION['token'];
+// 	return redirect('/')->withCookie("token", $token, 60)->header('Authorization', $token);
+// });
 
-Route::get('register', function(){
-	return view('auth.register');
-});
+// Route::get('register', function(){
+// 	return view('auth.register');
+// });
 
-Route::post('register', function(Request $request) use ($dispatcher){
-	$dispatcher
-		->with([
-			'email' => $request->input('email'),
-			'password' => $request->input('password'),
-			'password_confirmation' => $request->input('password_confirmation')
-		])
-		->post('api/register');
-	return redirect('/');
-});
+// Route::post('register', function(Request $request) use ($dispatcher){
+// 	$dispatcher
+// 		->with([
+// 			'email' => $request->input('email'),
+// 			'password' => $request->input('password'),
+// 			'password_confirmation' => $request->input('password_confirmation')
+// 		])
+// 		->post('api/register');
+// 	return redirect('/');
+// });
+
 //Test routes
 // Route::get('upload', function() {
 //   return view('upload');
@@ -82,8 +87,14 @@ $api->version('v1', function($api){
 	$api->get('pictures', 'App\Http\Controllers\PictureController@index');
 	$api->get('pictures/{id}', 'App\Http\Controllers\PictureController@show');
 
+	//Reviews
+	$api->get('reviews', 'App\Http\Controllers\ReviewController@index');
+	$api->get('reviews/{id}', 'App\Http\Controllers\ReviewController@show');
+
 	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
+		//Authenticated User
+		$api->get('user', 'App\Http\Controllers\AuthenticateController@getAuthenticatedUser');
 
 		//Geolocations
 		$api->post('geolocations', 'App\Http\Controllers\GeolocationController@store');
@@ -98,7 +109,12 @@ $api->version('v1', function($api){
 		//Pictures
 		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
 		$api->put('pictures/{id}', 'App\Http\Controllers\PictureController@update');
-		$api->delete('pictures/{id}', 'App\Http\Controllers\PictureController@delete');
+		$api->delete('pictures/{id}', 'App\Http\Controllers\PictureController@destroy');
+
+		//Reviews
+		$api->post('reviews', 'App\Http\Controllers\ReviewController@store');
+		$api->put('reviews/{id}', 'App\Http\Controllers\ReviewController@update');
+		$api->delete('reviews/{id}', 'App\Http\Controllers\ReviewController@destroy');
 	});
 
 	//This is just my random bullshit

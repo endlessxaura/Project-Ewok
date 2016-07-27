@@ -34,7 +34,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function callAuthenticated($method, $uri, array $data = [], array $headers = [])
     {
         if ($this->token && !isset($headers['Authorization'])) {
-            $headers['Authorization'] = "Bearer: $this->token";
+            $headers['Authorization'] = "Bearer: " . $this->token;
         }
 
         $server = $this->transformHeadersToServerVars($headers);
