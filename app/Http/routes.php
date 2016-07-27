@@ -58,11 +58,11 @@
 // });
 
 //Test routes
-// Route::get('upload', function() {
-//   return view('upload');
-// });
+Route::get('upload', function() {
+  return view('upload');
+});
 
-// Route::post('upload', '\App\Http\Controllers\PictureController@store');
+Route::post('upload', '\App\Http\Controllers\PictureController@store');
 
 //API
 $api = app('Dingo\Api\Routing\Router');
@@ -91,6 +91,11 @@ $api->version('v1', function($api){
 	$api->get('reviews', 'App\Http\Controllers\ReviewController@index');
 	$api->get('reviews/{id}', 'App\Http\Controllers\ReviewController@show');
 
+
+	//Farmers' Markets
+	$api->get('markets', 'App\Http\Controllers\MarketController@index');
+	$api->get('markets/{id}', 'App\Http\Controllers\MarketController@show');
+
 	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
 		//Authenticated User
@@ -115,6 +120,11 @@ $api->version('v1', function($api){
 		$api->post('reviews', 'App\Http\Controllers\ReviewController@store');
 		$api->put('reviews/{id}', 'App\Http\Controllers\ReviewController@update');
 		$api->delete('reviews/{id}', 'App\Http\Controllers\ReviewController@destroy');
+	
+		//Farmers' Markets
+		$api->post('markets', 'App\Http\Controllers\MarketController@store');
+		$api->put('markets/{id}', 'App\Http\Controllers\MarketController@update');
+		$api->delete('markets/{id}', 'App\Http\Controllers\MarketController@destroy');
 	});
 
 	//This is just my random bullshit

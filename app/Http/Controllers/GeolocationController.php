@@ -53,6 +53,9 @@ class GeolocationController extends Controller
                 ]);
             }
             else{
+                foreach($geolocations as &$geolocation){
+                    $geolocation->information();
+                }
                 return $geolocations;
             }
         }
@@ -77,6 +80,9 @@ class GeolocationController extends Controller
                 ]);            
             }
             else{
+                foreach($geolocations as &$geolocation){
+                    $geolocation->information();
+                }
                 return $geolocations;
             }
         }
@@ -110,7 +116,7 @@ class GeolocationController extends Controller
         $geolocation->longitude = $request->input('longitude');
         $geolocation->locationType = $request->input('locationType');
         $geolocation->save();
-        return Responses::Created();
+        return Responses::Created($geolocation->geolocationID);
     }
 
     /**
@@ -140,6 +146,9 @@ class GeolocationController extends Controller
                 ]);
             }
             else{
+                foreach($geolocations as $geolocation){
+                    $geolocation->information();
+                }
                 return $geolocation;
             }
         }

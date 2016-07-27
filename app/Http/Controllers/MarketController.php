@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Farm;
-use App\Geolocation;
-use App\Http\Requests;
 use App\Http\Controllers\Responses;
-use Illuminate\Http\Response;
+use App\Market;
+use App\Geolocation;
 use Schema;
+use App\Http\Requests;
 
-class FarmController extends Controller
+class MarketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,17 +19,17 @@ class FarmController extends Controller
     public function index(Request $request)
     {
         //PRE: $request may include name to search by name
-        //POST: Returns all farms, including their geolocation
+        //POST: Returns all markets, including their geolocation
         if($request->has('name')){
-            $farms = Farm::where('name', '=', $request->input('name'))->get();
+            $markets = Market::where('name', '=', $request->input('name'))->get();
         }
         else{
-            $farms = Farm::all();
+            $markets = Market::all();
         }
-        foreach($farms as $farm){
-            $farm->geolocation;
+        foreach($markets as $market){
+            $market->geolocation;
         }
-        return $farms;
+        return $markets;
     }
 
     /**
@@ -57,35 +56,35 @@ class FarmController extends Controller
         //      openingTime
         //      closingTime
         //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)
-        //POST: stores the farm in the database with the specified data
+        //POST: stores the market in the database with the specified data
         $geolocation = Geolocation::find($request->input('geolocationID'));
         if($geolocation != null){
             if($geolocation->hasAttached() == false){
-                //Creating new farm
-                $farm = new Farm;
-                $farm->geolocationID = $request->input('geolocationID');
-                $geolocation->locationType = 'farm';
-                $farm->name = $request->input('name');
-                $farm->openingTime = $request->input('openingTime', null);
-                $farm->closingTime = $request->input('closingTime', null);
+                //Creating new market
+                $market = new Market;
+                $market->geolocationID = $request->input('geolocationID');
+                $geolocation->locationType = 'market';
+                $market->name = $request->input('name');
+                $market->openingTime = $request->input('openingTime', null);
+                $market->closingTime = $request->input('closingTime', null);
 
                 //Updating each crop
-                $columns = Schema::getColumnListing('farm');
+                $columns = Schema::getColumnListing('market');
                 for($i = 7; $i < sizeof($columns); $i++){
-                    $farm[$columns[$i]] = $request->input($columns[$i], 0);
+                    $market[$columns[$i]] = $request->input($columns[$i], 0);
                 }
 
                 //Saving
-                $farm->save();
+                $market->save();
                 $geolocation->save();
-                return Responses::Created($farm->farmID);
+                return Responses::Created($market->marketID);
             }
             else{
                 return Responses::AlreadyExists();
             }
         }
         else{
-            return Responses::DoesNotExist('Geolocation');
+            return Responses::BadRequest();
         }
     }
 
@@ -97,12 +96,12 @@ class FarmController extends Controller
      */
     public function show($id)
     {
-        //PRE: $id must match a farm's farmID
-        //POST: returns the specified farm from the DB with geolocation
-        $farm = Farm::find($id);
-        if($farm != null){
-            $farm->geolocation;
-            return $farm;
+        //PRE: $id must match a market's marketID
+        //POST: returns the specified market from the DB with geolocation
+        $market = Market::find($id);
+        if($market != null){
+            $market->geolocation;
+            return $market;
         }
         else{
             return Responses::DoesNotExist();
@@ -129,31 +128,31 @@ class FarmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //PRE: $id must match a farm's ID
+        //PRE: $id must match a market's ID
         //      request may contain the following
         //      name
         //      openingTime
         //      closingTime
-        //POST: updates the farm with the specified information
+        //POST: updates the market with the specified information
         //NOTE: GEOLOCATION CANNOT BE CHANGED
-        $farm = Farm::find($id);
-        if($farm != null){
-            $farm->name = $request->input('name', $farm->name);
-            $farm->openingTime = $request->input('openingTime', $farm->openingTime);
-            $farm->closingTime = $request->input('closingTime', $farm->closingTime);
+        $market = Market::find($id);
+        if($market != null){
+            $market->name = $request->input('name', $market->name);
+            $market->openingTime = $request->input('openingTime', $market->openingTime);
+            $market->closingTime = $request->input('closingTime', $market->closingTime);
             
             //Updating each crop
-            $columns = Schema::getColumnListing('farm');
+            $columns = Schema::getColumnListing('market');
             for($i = 7; $i < sizeof($columns); $i++){
-                $farm[$columns[$i]] = $request->input($columns[$i], 0);
+                $market[$columns[$i]] = $request->input($columns[$i], 0);
             }
 
             //Saving
-            $farm->save();
+            $market->save();
             return Responses::Updated();
         }
         else{
-            return Responses::DoesNotExist('Farm');
+            return Responses::DoesNotExist('Market');
         }
     }
 
@@ -165,11 +164,11 @@ class FarmController extends Controller
      */
     public function destroy($id)
     {
-        //PRE: $id must match a farm's ID
-        //POST: deletes the farm from the database
-        $farm = Farm::find($id);
-        if($farm != null){
-            $farm->delete();
+        //PRE: $id must match a market's ID
+        //POST: deletes the market from the database
+        $market = Market::find($id);
+        if($market != null){
+            $market->delete();
             return Responses::Updated();
         }
         else{

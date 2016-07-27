@@ -7,6 +7,7 @@ use App\User;
 use App\Geolocation;
 use App\Farm;
 use App\Review;
+use App\Market;
 
 class APITest extends TestCase
 {
@@ -64,7 +65,7 @@ class APITest extends TestCase
     public function testFarm(){
         $this->createAuthenticatedUser();
         $geolocation = factory(Geolocation::class)->create([
-            'locationType' => 'Farm'
+            'locationType' => 'farm'
             ]);
         $farm = factory(Farm::class)->create([
             'geolocationID' => $geolocation->geolocationID
@@ -149,6 +150,43 @@ class APITest extends TestCase
 
         // $this->callAuthenticated('DELETE', '/api/reviews/' . $review->reviewID)
         //     ->assertResponseStatus(204);
+    }
+
+    //Market testing
+    public function testMarket(){
+        $this->createAuthenticatedUser();
+        $geolocation = factory(Geolocation::class)->create([
+            'locationType' => 'market'
+            ]);
+        $market = factory(Market::class)->create([
+            'geolocationID' => $geolocation->geolocationID
+            ]);
+
+        $this->callAuthenticated('GET', '/api/markets')
+            ->assertResponseOk();
+
+        $this->callAuthenticated('GET', '/api/markets/' . $market->marketID)
+            ->assertResponseOk();
+
+        $geolocation2 = factory(Geolocation::class)->create([
+            'locationType' => 'market'
+            ]);
+        $this->callAuthenticated('POST', '/api/markets', [
+            'geolocationID' => $geolocation2->geolocationID,
+            'name' => 'HelloWorld',
+            'openingTime' => null,
+            'closingTime' => null
+            ])
+            ->assertResponseStatus(201);
+
+        $this->callAuthenticated('PUT', '/api/markets/' . $market->marketID, [
+            'name' => 'HelloWorld???',
+            'apples' => 1
+            ])
+            ->assertResponseStatus(204);
+
+        $this->callAuthenticated('DELETE', '/api/farms/' . $market->marketID)
+            ->assertResponseStatus(204);
     }
 
     //NOTE: PICTURES DO NOT HAVE A TESTER BECAUSE YOU CAN'T WITH LARAVEL

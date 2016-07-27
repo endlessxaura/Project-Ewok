@@ -39,3 +39,11 @@ $factory->define(App\Review::class, function (Faker\Generator $faker) {
 		'vote' => $faker->numberBetween(-1, 1)
 	];
 });
+
+$factory->define(App\Market::class, function (Faker\Generator $faker) {
+	return [
+		'name' => $faker->name,
+		'openingTime' => $faker->time,
+		'closingTime' => $faker->time
+	];
+});

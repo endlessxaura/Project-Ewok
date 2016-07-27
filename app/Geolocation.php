@@ -22,7 +22,45 @@ class Geolocation extends Model
         return $this->hasMany('App\Review', 'geolocationID', 'geolocationID');
     }
 
+    public function pictures(){
+        //NOTE: DO NOT USE THIS DIRECTLY; USE getPictures() FOR ACCURATE RESULTS
+        return $this->hasMany('App\Picture', 'attachedID', 'geolocationID');
+    }
+
     //Functions
+    public function hasAttached(){
+        //POST: returns true if the geolocation has something attached, false otherwise
+        //NOTE: THIS MUST BE UPDATED FOR EACH TYPE OF LOCATION
+        if($this->locationType == 'farm'){
+            if($this->farm != null){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        if($this->locationType == 'market'){
+            if($this->market != null){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+    public function getPictures(){
+        //POST: returns all the pictures belonging to this geolocation
+        $possiblePictures = $this->pictures;
+        $validPictures = [];
+        foreach($possiblePictures as $possiblePicture){
+            if($possiblePicture->attachedModel == 'geolocation'){
+                $validPictures[] = $possiblePicture;
+            }
+        }
+        return $validPictures;
+    }
+
     public static function GetLocationsInRadius($distance, $center, $unit){
     	//PRE: distance is a number; $unit is k for kilometers, n for nautical miles, m for miles
     	//		center is the coordinates for the center as ['lat' => value, 'long' => value]
@@ -89,11 +127,23 @@ class Geolocation extends Model
         $information = array();
         if($this->locationType == 'farm'){
             $farm = $this->farm;
-            $information['farmID'] = $farm->farmID;
-            $information['locationType'] = "farm";
-            $information['name'] = $farm->name;
-            $information['openingTime'] = $farm->openingTime;
-            $information['closingTime'] = $farm->closingTime;
+            if($farm != null){
+                $information['farmID'] = $farm->farmID;
+                $information['locationType'] = "farm";
+                $information['name'] = $farm->name;
+                $information['openingTime'] = $farm->openingTime;
+                $information['closingTime'] = $farm->closingTime;
+            }
+        }
+        if($this->locationType == 'market'){
+            $market = $this->market;
+            if($market != null){
+                $information['farmID'] = $market->marketID;
+                $information['locationType'] = "farm";
+                $information['name'] = $market->market;
+                $information['openingTime'] = $market->openingTime;
+                $information['closingTime'] = $market->closingTime;
+            }
         }
         $information['geolocationID'] = $this->geolocationID;
         return $information;

@@ -71,7 +71,7 @@ class PictureController extends Controller
             //Naming the file
             $file = $request->file('image');
             $attachedItem = $picture->getAttached;
-            $fileName = $request->input('attachedItem') . '/' . $attachedItem->name . '/' . $file->getClientOriginalName();
+            $fileName = $request->input('attachedItem') . '/' . $attachedItem[$picture->attachedModel . "ID"] . '/' . $file->getClientOriginalName();
 
             //Storing the image
             $file = $request->file('image');
@@ -85,7 +85,7 @@ class PictureController extends Controller
             $picture->save();
 
             //Returning response
-            return Responses::Created();
+            return Responses::Created($picture->pictureID);
         }
         else{
             return Responses::BadRequest();
@@ -132,7 +132,6 @@ class PictureController extends Controller
         //PRE: $request may have the following
         //      attachedItem
         //      attachedID
-        //      filePath
         //      image
         //POST: Updates the picture with the specified information
         $picture = Picture::find($id);
