@@ -27,7 +27,10 @@ class Geolocation extends Model
     public function location(){
         return $this->morphTo();
     }
-
+    
+    public function pictures(){
+        return $this->morphMany('App\Picture', 'attached');
+    }
     //Functions
     public function hasAttached(){
         //POST: returns true if the geolocation has something attached, false otherwise
@@ -108,6 +111,7 @@ class Geolocation extends Model
         $information['name'] = $this->name;
         $information['description'] = $this->description;
         $information['locationInfo'] = $this->location;
+        $information['images'] = $this->pictures;
         $information['geolocationID'] = $this->geolocationID;
         return $information;
     }

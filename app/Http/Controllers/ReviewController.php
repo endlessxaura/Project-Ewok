@@ -99,6 +99,7 @@ class ReviewController extends Controller
         //POST: returns the view with a matching ID
         $review = Review::find($id);
         if($review != null){
+            $review->pictures;
             return $review;
         }
         else{

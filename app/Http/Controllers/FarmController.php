@@ -94,6 +94,7 @@ class FarmController extends Controller
         $farm = Farm::find($id);
         if($farm != null){
             $farm->geolocation;
+            $farm->pictures;
             return $farm;
         }
         else{

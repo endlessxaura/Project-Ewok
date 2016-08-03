@@ -25,6 +25,10 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function pictures(){
+        return $this->morphMany('App\Picture', 'attached');
+    }
+
     //Functions
     
 }

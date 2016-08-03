@@ -94,6 +94,7 @@ class MarketController extends Controller
         $market = Market::find($id);
         if($market != null){
             $market->geolocation;
+            $market->pictures;
             return $market;
         }
         else{

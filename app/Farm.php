@@ -17,4 +17,8 @@ class Farm extends Model
     public function geolocation(){
     	return $this->morphMany('App\Geolocation', 'location');
     }
+
+    public function pictures(){
+        return $this->morphMany('App\Picture', 'attached');
+    }
 }

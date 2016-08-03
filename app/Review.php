@@ -22,4 +22,8 @@ class Review extends Model
     public function geolocation(){
     	return $this->belongsTo('App\Geolocation', 'geolocationID', 'geolocationID');
     }
+
+    public function pictures(){
+        return $this->morphMany('App\Picture', 'attached');
+    }
 }
