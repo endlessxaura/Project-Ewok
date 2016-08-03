@@ -40,12 +40,35 @@ class Geolocation extends Model
     //Functions
     public function hasAttached(){
         //POST: returns true if the geolocation has something attached, false otherwise
-        //NOTE: THIS MUST BE UPDATED FOR EACH TYPE OF LOCATION
-        $possibleRelationship = $this->hasMany('App\\'.$this->locationType, 'geolocationID', 'geolocationID')->get();
+        //NOTE: this requires that any model that can be attached to it change the geolocations
+        //      locationType to match the name of the MODEL (not the table) that it is attache to
+        if($this->locationType != null){
+            $possibleRelationship = $this->hasMany('App\\'.$this->locationType, 'geolocationID', 'geolocationID')->get();
+        }
+        else{
+            return false;
+        }
+
         if($possibleRelationship->isEmpty()){
             return false;
         }
         else return true;
+    }
+
+    public function getAttached(){
+        //POST: returns the attached record if it exists
+        //      if it does not, returns null or an empty array
+        //NOTE: this requires that any model that can be attached to it change the geolocations
+        //      locationType to match the name of the MODEL (not the table) that it is attache to
+        if($this->locationType != null){
+            $item = $this->hasMany('App\\'.$this->locationType, 'geolocationID', 'geolocationID')->get();
+            if($item->isEmpty()){
+                return null;
+            }
+            else{
+                return $item;
+            }
+        }
     }
 
     public function getPictures(){
@@ -126,6 +149,8 @@ class Geolocation extends Model
         $information = array();
         $information['name'] = $this->name;
         $information['description'] = $this->description;
+        $attached = $this->getAttached();
+        $information['locationInfo'] = $attached;
         $images = $this->getPictures();
         $information['coverImage'] = count($images) > 0 ? $images[0]->filePath : null;
         $information['geolocationID'] = $this->geolocationID;

@@ -57,7 +57,7 @@ class MarketController extends Controller
                 //Creating new market
                 $market = new Market;
                 $market->geolocationID = $request->input('geolocationID');
-                $geolocation->locationType = 'market';
+                $geolocation->locationType = 'Market';
                 $market->openingTime = $request->input('openingTime', null);
                 $market->closingTime = $request->input('closingTime', null);
 
@@ -133,7 +133,7 @@ class MarketController extends Controller
             $market->closingTime = $request->input('closingTime', $market->closingTime);
             
             //Updating each crop
-            $columns = Schema::getColumnListing('Market');
+            $columns = Schema::getColumnListing('market');
             for($i = 7; $i < sizeof($columns); $i++){
                 $market[$columns[$i]] = $request->input($columns[$i], 0);
             }
