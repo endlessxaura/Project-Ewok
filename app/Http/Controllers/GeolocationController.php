@@ -182,6 +182,8 @@ class GeolocationController extends Controller
         //      latitude
         //      longitude
         //      locationType
+        //      name
+        //      description
         //POST: Stores the specified geolocation in the DB
         $geolocation = new Geolocation;
         $latitude = $request->input('latitude');
@@ -193,6 +195,8 @@ class GeolocationController extends Controller
         $geolocation->latitude = $latitude;
         $geolocation->longitude = $longitude;
         $geolocation->locationType = $locationType;
+        $geolocation->name = $request->input('name');
+        $geolocation->description = $request->input('description');
         $geolocation->save();
         return Responses::Created($geolocation->geolocationID);
     }
@@ -257,24 +261,19 @@ class GeolocationController extends Controller
     {
         //PRE: request must contain latitude and longitude
         //      $id must match a geolocationID
-        //POST: overwrites the previous latitude and longitude with the new values
-        $lat = $request->input('latitude');
-        $long = $request->input('longitude');
-        if($lat != null && $long != null){
-            $geolocation = Geolocation::find($id);
-            if($geolocation != null){
-                $geolocation->latitude = $lat;
-                $geolocation->longitude = $long;
-                $geolocation->locationType = $request->input('locationType', $geolocation->locationType);
-                $geolocation->save();
-                return Responses::Updated();
-            }
-            else{
-                return Responses::DoesNotExist('Geolocation');
-            }
+        //POST: overwrites the previous data with the new values
+        $geolocation = Geolocation::find($id);
+        if($geolocation != null){
+            $geolocation->latitude = $request->input('latitude', $geolocation->latitude);
+            $geolocation->longitude = $request->input('longitude', $geolocation->longitude);
+            $geolocation->locationType = $request->input('locationType', $geolocation->locationType);
+            $geolocation->name = $request->input('name', $geolocation->name);
+            $geolocation->description = $request->input('description', $geolocation->description);
+            $geolocation->save();
+            return Responses::Updated();
         }
         else{
-            return Responses::BadRequest();
+            return Responses::DoesNotExist('Geolocation');
         }
     }
 

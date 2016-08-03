@@ -110,6 +110,8 @@ class Geolocation extends Model
         //      farm
         //NOTE: This part is not modular. Remove this when exporting to a new project
         $information = array();
+        $information['name'] = $this->name;
+        $information['description'] = $this->description;
         $images = $this->getPictures();
         $information['coverImage'] = count($images) > 0 ? $images[0]->filePath : null;
         $information['geolocationID'] = $this->geolocationID;

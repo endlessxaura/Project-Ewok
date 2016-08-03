@@ -85,8 +85,6 @@ $api->version('v1', function($api){
 	$api->get('geolocations', 'App\Http\Controllers\GeolocationController@index');
 	$api->get('geolocations/{id}', 'App\Http\Controllers\GeolocationController@show');
 
-	//Locations
-
 	//Pictures
 	$api->get('pictures', 'App\Http\Controllers\PictureController@index');
 	$api->get('pictures/{id}', 'App\Http\Controllers\PictureController@show');

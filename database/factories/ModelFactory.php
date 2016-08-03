@@ -21,7 +21,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Geolocation::class, function (Faker\Generator $faker) {
 	return [
 		'latitude' => $faker->latitude,
-		'longitude' => $faker->longitude
+		'longitude' => $faker->longitude,
+		'name' => $faker->name,
+		'description' => $faker->sentence
 	];
 });
 

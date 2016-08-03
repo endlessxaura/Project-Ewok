@@ -49,11 +49,6 @@ class APITest extends TestCase
         	->assertResponseStatus(410);
 
         $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
-        	'lat' => 50
-        	])
-        	->assertResponseStatus(400);
-
-        $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
         	'latitude' => 50,
         	'longitude' => 50
         	])
