@@ -14,7 +14,6 @@ class Geolocation extends Model
     protected $fillable = ['geolocationID', 'latitude', 'longitude'];
 
     //Relationships
-
     public function reviews(){
         return $this->hasMany('App\Review', 'geolocationID', 'geolocationID');
     }
@@ -22,6 +21,12 @@ class Geolocation extends Model
     public function pictures(){
         //NOTE: DO NOT USE THIS DIRECTLY; USE getPictures() FOR ACCURATE RESULTS
         return $this->hasMany('App\Picture', 'attachedID', 'geolocationID');
+    }
+
+    public function users(){
+        return $this->belongsToMany('App\User', 'submission', 'geolocationID', 'userID')
+            ->withPivot('compassDirection', 'valid')
+            ->withTimestamps();
     }
 
     //Functions

@@ -102,6 +102,7 @@ $api->version('v1', function($api){
 		$api->post('geolocations', 'App\Http\Controllers\GeolocationController@store');
 		$api->put('geolocations/{id}', 'App\Http\Controllers\GeolocationController@update');
 		$api->delete('geolocations/{id}', 'App\Http\Controllers\GeolocationController@destroy');
+		$api->post('geolocations/{id}/validate', 'App\Http\Controllers\GeolocationController@validation');
 
 		//Pictures
 		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
