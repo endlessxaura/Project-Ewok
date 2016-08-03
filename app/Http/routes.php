@@ -93,6 +93,14 @@ $api->version('v1', function($api){
 	$api->get('reviews', 'App\Http\Controllers\ReviewController@index');
 	$api->get('reviews/{id}', 'App\Http\Controllers\ReviewController@show');
 
+	//Farms
+	$api->get('farms', 'App\Http\Controllers\FarmController@index');
+	$api->get('farms/{id}', 'App\Http\Controllers\FarmController@show');
+	
+	//Farmers' Markets
+	$api->get('markets', 'App\Http\Controllers\MarketController@index');
+	$api->get('markets/{id}', 'App\Http\Controllers\MarketController@show');
+
 	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
 		//Authenticated User
@@ -113,6 +121,16 @@ $api->version('v1', function($api){
 		$api->post('reviews', 'App\Http\Controllers\ReviewController@store');
 		$api->put('reviews/{id}', 'App\Http\Controllers\ReviewController@update');
 		$api->delete('reviews/{id}', 'App\Http\Controllers\ReviewController@destroy');
+		
+		//Farms
+		$api->post('farms', 'App\Http\Controllers\FarmController@store');
+		$api->put('farms/{id}', 'App\Http\Controllers\FarmController@update');
+		$api->delete('farms/{id}', 'App\Http\Controllers\FarmController@destroy');
+
+		//Farmers' Markets
+		$api->post('markets', 'App\Http\Controllers\MarketController@store');
+		$api->put('markets/{id}', 'App\Http\Controllers\MarketController@update');
+		$api->delete('markets/{id}', 'App\Http\Controllers\MarketController@destroy');
 	});
 
 	//This is just my random bullshit

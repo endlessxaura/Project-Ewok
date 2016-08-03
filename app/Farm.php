@@ -11,7 +11,7 @@ class Farm extends Model
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['name', 'openingTime', 'closingTime', 'geolocationID'];
+    protected $fillable = ['openingTime', 'closingTime', 'geolocationID'];
 
     //Relationships
     public function geolocation(){

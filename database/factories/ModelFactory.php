@@ -40,3 +40,17 @@ $factory->define(App\Location::class, function (Faker\Generator $faker){
 		'description' => $faker->sentence
 	];
 });
+
+$factory->define(App\Market::class, function (Faker\Generator $faker) {
+	return [
+		'openingTime' => $faker->time,
+		'closingTime' => $faker->time
+	];
+});
+
+$factory->define(App\Farm::class, function (Faker\Generator $faker) {
+	return [
+		'openingTime' => $faker->time,
+		'closingTime' => $faker->time
+	];
+});

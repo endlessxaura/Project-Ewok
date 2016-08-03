@@ -51,10 +51,10 @@ class GeolocationController extends Controller
             $unit = $request->input('unit', 'm');
             $radiusFlag = true;
         }
-        // if($request->input('locationType') != null){
-        //     $locationType = $request->input('locationType');
-        //     $typeFlag = true;
-        // }
+        if($request->input('locationType') != null){
+            $locationType = $request->input('locationType');
+            $typeFlag = true;
+        }
         if($request->input('name') != null){
             $name = $request->input('name');
             $nameFlag = true;
@@ -79,11 +79,11 @@ class GeolocationController extends Controller
                 }
             }
         }
-        // else if($typeFlag){
-        //     $geolocations = Geolocation::where('locationType', '=', $locationType)
-        //         ->get()
-        //         ->all();
-        // }
+        else if($typeFlag){
+            $geolocations = Geolocation::where('locationType', '=', $locationType)
+                ->get()
+                ->all();
+        }
         else{
             $geolocations = Geolocation::all()->all();
         }        

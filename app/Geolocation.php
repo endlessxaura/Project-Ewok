@@ -29,14 +29,23 @@ class Geolocation extends Model
             ->withTimestamps();
     }
 
+    public function farms(){
+        return $this->hasMany('App\Farm', 'geolocationID', 'geolocationID');
+    }
+
+    public function markets(){
+        return $this->hasMany('App\Market', 'geolocationID', 'geolocationID');
+    }
+
     //Functions
     public function hasAttached(){
         //POST: returns true if the geolocation has something attached, false otherwise
         //NOTE: THIS MUST BE UPDATED FOR EACH TYPE OF LOCATION
-        if($this->location != null){
-            return true;
+        $possibleRelationship = $this->hasMany('App\\'.$this->locationType, 'geolocationID', 'geolocationID')->get();
+        if($possibleRelationship->isEmpty()){
+            return false;
         }
-        else return false;
+        else return true;
     }
 
     public function getPictures(){
