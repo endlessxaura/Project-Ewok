@@ -36,7 +36,7 @@ $factory->define(App\Geolocation::class, function (Faker\Generator $faker) {
 $factory->define(App\Review::class, function (Faker\Generator $faker) {
 	return [
 		'comment' => $faker->sentence,
-		'vote' => $faker->numberBetween(-1, 1)
+		'rating' => $faker->numberBetween(0, 5)
 	];
 });
 

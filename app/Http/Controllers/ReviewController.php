@@ -7,6 +7,7 @@ use App\Review;
 use App\Http\Controllers\Responses;
 use App\Http\Requests;
 use JWTAuth;
+use App\Geolocation;
 
 class ReviewController extends Controller
 {
@@ -56,7 +57,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //PRE: $request MUST contain a comment, userID, and geolocationID
-        //     $request may contain vote (negative for bad, positive for good)
+        //     $request may contain rating (0 to 5)
         //      The user cannot have a review for that geolocation already
         //POST: stores the specified review in the database
         $userID = JWTAuth::parseToken()->authenticate()->userID;
@@ -64,13 +65,23 @@ class ReviewController extends Controller
             ->where('geolocationID', '=', $request->input('geolocationID'))
             ->get();
         if($previousReview->isEmpty()){
-            $review = new Review;
-            $review->userID = $userID;
-            $review->geolocationID = $request->input('geolocationID');
-            $review->comment = $request->input('comment');
-            $review->vote = $request->input('vote', 0);
-            $review->save();
-            return Responses::Created($review->reviewID);  
+            if(Geolocation::find($request->input('geolocationID')) != null){
+                if($request->input('rating') <= 5 && $request->input('rating') >= 0){
+                    $review = new Review;
+                    $review->userID = $userID;
+                    $review->geolocationID = $request->input('geolocationID');
+                    $review->comment = $request->input('comment');
+                    $review->rating = $request->input('rating', 0);
+                    $review->save();
+                    return Responses::Created($review->reviewID);  
+                }
+                else{
+                    return Responses::BadRequest();
+                }
+            }
+            else{
+                return Responses::DoesNotExist('Geolocation');
+            }
         }
         else{
             return Responses::AlreadyExists();
@@ -116,38 +127,48 @@ class ReviewController extends Controller
     public function update(Request $request, $id)
     {        
         //PRE: $request may contain a comment, userID, and geolocationID
-        //     $request may contain vote (negative for bad, positive for good)
+        //     $request may contain rating (0 to 5)
         //      The user MUST own the review
         //POST: stores the specified review in the database
         $review = Review::find($id);
         $userID = JWTAuth::parseToken()->authenticate()->userID;
         $previousReview = null;
         if($review != null){
-            if($request->input('userID', $userID) != $review->userID ||
-                $request->input('geolocationID', $review->geolocationID) != $review->geolocationID){
-                $previousReview = Review::where('userID', '=', $userID)
-                    ->where('geolocationID', '=', $request->input('geolocationID'))
-                    ->get();
-            }
-            if($previousReview == null || $previousReview->isEmpty()){
-                if($review->userID == $userID){
-                    $review->userID = $request->input('userID', $userID);
-                    $review->geolocationID = $request->input('geolocationID', $review->geolocationID);
-                    $review->comment = $request->input('comment', $review->comment);
-                    $review->vote = $request->input('vote', $review->vote);
-                    $review->save();
-                    return Responses::Updated();
+            if(Geolocation::find($request->input('geolocationID')) != null){
+                if($request->input('userID', $userID) != $review->userID ||
+                    $request->input('geolocationID', $review->geolocationID) != $review->geolocationID){
+                    $previousReview = Review::where('userID', '=', $userID)
+                        ->where('geolocationID', '=', $request->input('geolocationID'))
+                        ->get();
+                }
+                if($previousReview == null || $previousReview->isEmpty()){
+                    if($review->userID == $userID){
+                        if($request->input('rating') <= 5 && $request->input('rating') >= 0){
+                            $review->userID = $request->input('userID', $userID);
+                            $review->geolocationID = $request->input('geolocationID', $review->geolocationID);
+                            $review->comment = $request->input('comment', $review->comment);
+                            $review->rating = $request->input('rating', $review->rating);
+                            $review->save();
+                            return Responses::Updated(); 
+                        }
+                        else{
+                            return Responses::BadRequest();
+                        }
+                    }
+                    else{
+                        return Responses::PermissionDenied();
+                    }
                 }
                 else{
-                    return Responses::PermissionDenied();
+                    return Responses::AlreadyExists();
                 }
             }
-            else{
-                return Responses::AlreadyExists();
+            else {
+                return Responses::DoesNotExist('Geolocation');
             }
         }
         else{
-            return Responses::DoesNotExist();
+            return Responses::DoesNotExist('Review');
         }
     }
 
@@ -163,17 +184,22 @@ class ReviewController extends Controller
         //POST: deletes the review with a matching ID
         $review = Review::find($id);
         $user = JWTAuth::parseToken()->authenticate();
-        if($review != null){
-            if($review->userID == $user->userID){
-                $review->delete();
-                return Responses::Updated();
+        if($review != null){           
+            if(Geolocation::find($request->input('geolocationID')) != null){
+                if($review->userID == $user->userID){
+                    $review->delete();
+                    return Responses::Updated();
+                }
+                else{
+                    return Responses::PermissionDenied();
+                }
             }
             else{
-                return Responses::PermissionDenied();
+                return Responses::DoesNotExist('Geolocation');
             }
         }
         else{
-            return Responses::DoesNotExist();
+            return Responses::DoesNotExist('Review');
         }
     }
 }
