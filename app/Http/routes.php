@@ -85,9 +85,7 @@ $api->version('v1', function($api){
 	$api->get('geolocations', 'App\Http\Controllers\GeolocationController@index');
 	$api->get('geolocations/{id}', 'App\Http\Controllers\GeolocationController@show');
 
-	//Farms
-	$api->get('farms', 'App\Http\Controllers\FarmController@index');
-	$api->get('farms/{id}', 'App\Http\Controllers\FarmController@show');
+	//Locations
 
 	//Pictures
 	$api->get('pictures', 'App\Http\Controllers\PictureController@index');
@@ -96,11 +94,6 @@ $api->version('v1', function($api){
 	//Reviews
 	$api->get('reviews', 'App\Http\Controllers\ReviewController@index');
 	$api->get('reviews/{id}', 'App\Http\Controllers\ReviewController@show');
-
-
-	//Farmers' Markets
-	$api->get('markets', 'App\Http\Controllers\MarketController@index');
-	$api->get('markets/{id}', 'App\Http\Controllers\MarketController@show');
 
 	/////Updating and deleting data/////
 	$api->group(['middleware' => 'api.auth'], function($api){
@@ -111,12 +104,7 @@ $api->version('v1', function($api){
 		$api->post('geolocations', 'App\Http\Controllers\GeolocationController@store');
 		$api->put('geolocations/{id}', 'App\Http\Controllers\GeolocationController@update');
 		$api->delete('geolocations/{id}', 'App\Http\Controllers\GeolocationController@destroy');
-	
-		//Farms
-		$api->post('farms', 'App\Http\Controllers\FarmController@store');
-		$api->put('farms/{id}', 'App\Http\Controllers\FarmController@update');
-		$api->delete('farms/{id}', 'App\Http\Controllers\FarmController@destroy');
-	
+
 		//Pictures
 		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
 		$api->put('pictures/{id}', 'App\Http\Controllers\PictureController@update');
@@ -126,11 +114,6 @@ $api->version('v1', function($api){
 		$api->post('reviews', 'App\Http\Controllers\ReviewController@store');
 		$api->put('reviews/{id}', 'App\Http\Controllers\ReviewController@update');
 		$api->delete('reviews/{id}', 'App\Http\Controllers\ReviewController@destroy');
-	
-		//Farmers' Markets
-		$api->post('markets', 'App\Http\Controllers\MarketController@store');
-		$api->put('markets/{id}', 'App\Http\Controllers\MarketController@update');
-		$api->delete('markets/{id}', 'App\Http\Controllers\MarketController@destroy');
 	});
 
 	//This is just my random bullshit

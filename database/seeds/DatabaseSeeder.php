@@ -15,11 +15,5 @@ class DatabaseSeeder extends Seeder
         factory(App\Geolocation::class, 500)->create([
             'locationType' => 'farm'
             ]);
-
-        for($i = 1; $i <= 500; $i++){ 
-            factory(App\Farm::class)->create([
-                'geolocationID' => $i
-                ]);
-        }
     }
 }

@@ -8,6 +8,7 @@ use App\Geolocation;
 use App\Farm;
 use App\Review;
 use App\Market;
+use App\Location;
 
 class APITest extends TestCase
 {
@@ -62,43 +63,6 @@ class APITest extends TestCase
     		->assertResponseStatus(204);
     }
 
-    //Farm testing
-    public function testFarm(){
-        $this->createAuthenticatedUser();
-        $geolocation = factory(Geolocation::class)->create([
-            'locationType' => 'farm'
-            ]);
-        $farm = factory(Farm::class)->create([
-            'geolocationID' => $geolocation->geolocationID
-            ]);
-
-        $this->callAuthenticated('GET', '/api/farms')
-            ->assertResponseOk();
-
-        $this->callAuthenticated('GET', '/api/farms/' . $farm->farmID)
-            ->assertResponseOk();
-
-        $geolocation2 = factory(Geolocation::class)->create([
-            'locationType' => 'Farm'
-            ]);
-        $this->callAuthenticated('POST', '/api/farms', [
-            'geolocationID' => $geolocation2->geolocationID,
-            'name' => 'HelloWorld',
-            'openingTime' => null,
-            'closingTime' => null
-            ])
-            ->assertResponseStatus(201);
-
-        $this->callAuthenticated('PUT', '/api/farms/' . $farm->farmID, [
-            'name' => 'HelloWorld???',
-            'apples' => 1
-            ])
-            ->assertResponseStatus(204);
-
-        $this->callAuthenticated('DELETE', '/api/farms/' . $farm->farmID)
-            ->assertResponseStatus(204);
-    }
-
     //Review testing
     public function testReview(){
         $this->createAuthenticatedUser();
@@ -116,78 +80,6 @@ class APITest extends TestCase
 
         //For some reason, the following tests fail because it can't parse the token
         //TBH, I have no idea why. Test these using postman or another request builder
-
-        // $geolocation2 = factory(Geolocation::class)->create([
-        //     'locationType' => 'Farm'
-        //     ]);
-        // $this->callAuthenticated('POST', '/api/reviews', [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation2->geolocationID,
-        //     'comment' => 'fudge',
-        //     'vote' => 1
-        //     ])
-        //     ->assertResponseStatus(201);
-
-        // $this->callAuthenticated('POST', '/api/reviews', [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation->geolocationID,
-        //     'comment' => 'Not gonna work'
-        //     ])
-        //     ->assertResponseStatus(409);
-
-        // $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation->geolocationID,
-        //     'comment' => 'Fooeybar'
-        //     ])
-        //     ->assertResponseStatus(204);
-
-        // $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation2->geolocationID,
-        //     'comment' => 'Fooeybar'
-        //     ])
-        //     ->assertResponseStatus(409);
-
-        // $this->callAuthenticated('DELETE', '/api/reviews/' . $review->reviewID)
-        //     ->assertResponseStatus(204);
-    }
-
-    //Market testing
-    public function testMarket(){
-        $this->createAuthenticatedUser();
-        $geolocation = factory(Geolocation::class)->create([
-            'locationType' => 'market'
-            ]);
-        $market = factory(Market::class)->create([
-            'geolocationID' => $geolocation->geolocationID
-            ]);
-
-        $this->callAuthenticated('GET', '/api/markets')
-            ->assertResponseOk();
-
-        $this->callAuthenticated('GET', '/api/markets/' . $market->marketID)
-            ->assertResponseOk();
-
-        $geolocation2 = factory(Geolocation::class)->create([
-            'locationType' => 'market'
-            ]);
-        $this->callAuthenticated('POST', '/api/markets', [
-            'geolocationID' => $geolocation2->geolocationID,
-            'name' => 'HelloWorld',
-            'openingTime' => null,
-            'closingTime' => null
-            ])
-            ->assertResponseStatus(201);
-
-        $this->callAuthenticated('PUT', '/api/markets/' . $market->marketID, [
-            'name' => 'HelloWorld???',
-            'apples' => 1
-            ])
-            ->assertResponseStatus(204);
-
-        $this->callAuthenticated('DELETE', '/api/farms/' . $market->marketID)
-            ->assertResponseStatus(204);
     }
 
     //NOTE: PICTURES DO NOT HAVE A TESTER BECAUSE YOU CAN'T WITH LARAVEL
