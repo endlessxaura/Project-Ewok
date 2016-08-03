@@ -37,8 +37,7 @@ class APITest extends TestCase
 
         $this->callAuthenticated('POST', '/api/geolocations', [
         	'latitude' => 87,
-        	'longitude' => 96,
-            'locationType' => 'farm'
+        	'longitude' => 96
         	])
         	->assertResponseStatus(201);
 

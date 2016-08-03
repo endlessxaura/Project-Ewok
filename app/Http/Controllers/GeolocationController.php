@@ -188,13 +188,12 @@ class GeolocationController extends Controller
         $geolocation = new Geolocation;
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        $locationType = $request->input('locationType');
-        if($latitude == null || $longitude == null || $locationType == null){
+        if($latitude == null || $longitude == null){
             return Responses::BadRequest();
         }
         $geolocation->latitude = $latitude;
         $geolocation->longitude = $longitude;
-        $geolocation->locationType = $locationType;
+        $geolocation->locationType = $request->input('locationType');
         $geolocation->name = $request->input('name');
         $geolocation->description = $request->input('description');
         $geolocation->save();
