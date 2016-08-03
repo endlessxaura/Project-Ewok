@@ -19,7 +19,7 @@ class Picture extends Model
     	//PRE: This requires there to be an attached model
     	//		The attached model's primary key must be '[modelName]ID'
     	//		The primary key in the DB must also have [modelName]
-    	//		It should always be lower case
+    	//		The primary key should always be lower case
     	//		These match the basic database nomenclature used
     	//		For example: farm = model name, farmID is primary key in DB
     	//POST: Returns the model the picture is attached to

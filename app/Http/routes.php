@@ -68,10 +68,16 @@ Route::post('upload', '\App\Http\Controllers\PictureController@store');
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function($api){
+	/////Documentation/////
+	$api->get('documentation', function(){
+		return "in progress";
+	});
+
 	/////Authentication/////
 	$api->post('register', 'App\Http\Controllers\AuthenticateController@register');
 	$api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
 	$api->post('refreshToken', 'App\Http\Controllers\AuthenticateController@refreshToken');
+	$api->post('destroyToken', 'App\Http\Controllers\AuthenticateController@destroyToken');
 
 	/////Reading data/////
 

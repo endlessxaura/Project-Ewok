@@ -138,13 +138,15 @@ class Geolocation extends Model
         if($this->locationType == 'market'){
             $market = $this->market;
             if($market != null){
-                $information['farmID'] = $market->marketID;
-                $information['locationType'] = "farm";
+                $information['marketID'] = $market->marketID;
+                $information['locationType'] = "market";
                 $information['name'] = $market->market;
                 $information['openingTime'] = $market->openingTime;
                 $information['closingTime'] = $market->closingTime;
             }
         }
+        $images = $this->getPictures();
+        $information['coverImage'] = count($images) > 0 ? $images[0]->filePath : null;
         $information['geolocationID'] = $this->geolocationID;
         return $information;
     }
