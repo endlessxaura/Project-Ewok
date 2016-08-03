@@ -22,21 +22,4 @@ class Review extends Model
     public function geolocation(){
     	return $this->belongsTo('App\Geolocation', 'geolocationID', 'geolocationID');
     }
-
-    public function pictures(){
-        //NOTE: DO NOT USE THIS DIRECTLY; USE getPictures() FOR ACCURATE RESULTS
-        return $this->hasMany('App\Picture', 'attachedID', 'reviewID');
-    }
-
-    //Functions
-    public function getPictures(){
-        $possiblePictures = $this->pictures;
-        $validPictures = [];
-        foreach($possiblePictures as $possiblePicture){
-            if($possiblePicture->attachedModel == 'review'){
-                $validPictures[] = $possiblePicture;
-            }
-        }
-        return $validPictures;
-    }
 }

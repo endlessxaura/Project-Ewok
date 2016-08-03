@@ -11,16 +11,11 @@ class Geolocation extends Model
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['geolocationID', 'latitude', 'longitude'];
+    protected $fillable = ['geolocationID', 'latitude', 'longitude', 'location_type', 'location_id'];
 
     //Relationships
     public function reviews(){
         return $this->hasMany('App\Review', 'geolocationID', 'geolocationID');
-    }
-
-    public function pictures(){
-        //NOTE: DO NOT USE THIS DIRECTLY; USE getPictures() FOR ACCURATE RESULTS
-        return $this->hasMany('App\Picture', 'attachedID', 'geolocationID');
     }
 
     public function users(){
@@ -44,18 +39,6 @@ class Geolocation extends Model
         else{
             return false;
         }
-    }
-
-    public function getPictures(){
-        //POST: returns all the pictures belonging to this geolocation
-        $possiblePictures = $this->pictures;
-        $validPictures = [];
-        foreach($possiblePictures as $possiblePicture){
-            if($possiblePicture->attachedModel == 'geolocation'){
-                $validPictures[] = $possiblePicture;
-            }
-        }
-        return $validPictures;
     }
 
     public static function GetLocationsInRadius($distance, $center, $unit){
@@ -125,8 +108,6 @@ class Geolocation extends Model
         $information['name'] = $this->name;
         $information['description'] = $this->description;
         $information['locationInfo'] = $this->location;
-        $images = $this->getPictures();
-        $information['coverImage'] = count($images) > 0 ? $images[0]->filePath : null;
         $information['geolocationID'] = $this->geolocationID;
         return $information;
     }
