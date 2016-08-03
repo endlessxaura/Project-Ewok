@@ -51,8 +51,8 @@ class GeolocationController extends Controller
             $unit = $request->input('unit', 'm');
             $radiusFlag = true;
         }
-        if($request->input('locationType') != null){
-            $locationType = $request->input('locationType');
+        if($request->input('location_type') != null){
+            $location_type = $request->input('locationType');
             $typeFlag = true;
         }
         if($request->input('name') != null){
@@ -73,14 +73,14 @@ class GeolocationController extends Controller
                 );
             if($typeFlag){
                 foreach($geolocations as $geolocation){
-                    if($geolocation->locationType != $locationType){
+                    if($geolocation->location_type != $location_type){
                         unset($geolocations[array_search($geolocation, $geolocations)]);
                     }
                 }
             }
         }
         else if($typeFlag){
-            $geolocations = Geolocation::where('locationType', '=', $locationType)
+            $geolocations = Geolocation::where('location_type', '=', $location_type)
                 ->get()
                 ->all();
         }
@@ -195,7 +195,7 @@ class GeolocationController extends Controller
         }
         $geolocation->latitude = $latitude;
         $geolocation->longitude = $longitude;
-        $geolocation->locationType = $request->input('locationType');
+        $geolocation->location_type = $request->input('locationType');
         $geolocation->name = $request->input('name');
         $geolocation->description = $request->input('description');
         $geolocation->save();
@@ -277,7 +277,7 @@ class GeolocationController extends Controller
         if($geolocation != null){
             $geolocation->latitude = $request->input('latitude', $geolocation->latitude);
             $geolocation->longitude = $request->input('longitude', $geolocation->longitude);
-            $geolocation->locationType = $request->input('locationType', $geolocation->locationType);
+            $geolocation->location_type = $request->input('locationType', $geolocation->locationType);
             $geolocation->name = $request->input('name', $geolocation->name);
             $geolocation->description = $request->input('description', $geolocation->description);
             $geolocation->save();

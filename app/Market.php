@@ -16,7 +16,7 @@ class Market extends Model
 
     //Relationships
     public function geolocation(){
-    	return $this->hasOne('App\Geolocation', 'geolocationID', 'geolocationID');
+    	return $this->morphMany('App\Geolocation', 'location');
     }
 
     public function pictures(){

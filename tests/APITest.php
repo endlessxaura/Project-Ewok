@@ -60,12 +60,7 @@ class APITest extends TestCase
      //Farm testing
     public function testFarm(){
         $this->createAuthenticatedUser();
-        $geolocation = factory(Geolocation::class)->create([
-            'locationType' => 'farm'
-            ]);
-        $farm = factory(Farm::class)->create([
-            'geolocationID' => $geolocation->geolocationID
-            ]);
+        $farm = factory(Farm::class)->create();
 
         $this->callAuthenticated('GET', '/api/farms')
             ->assertResponseOk();
@@ -73,9 +68,7 @@ class APITest extends TestCase
         $this->callAuthenticated('GET', '/api/farms/' . $farm->farmID)
             ->assertResponseOk();
 
-        $geolocation2 = factory(Geolocation::class)->create([
-            'locationType' => 'Farm'
-            ]);
+        $geolocation2 = factory(Geolocation::class)->create();
         $this->callAuthenticated('POST', '/api/farms', [
             'geolocationID' => $geolocation2->geolocationID,
             'openingTime' => null,
@@ -149,12 +142,7 @@ class APITest extends TestCase
     //Market testing
     public function testMarket(){
         $this->createAuthenticatedUser();
-        $geolocation = factory(Geolocation::class)->create([
-            'locationType' => 'market'
-            ]);
-        $market = factory(Market::class)->create([
-            'geolocationID' => $geolocation->geolocationID
-            ]);
+        $market = factory(Market::class)->create();
 
         $this->callAuthenticated('GET', '/api/markets')
             ->assertResponseOk();
@@ -162,9 +150,7 @@ class APITest extends TestCase
         $this->callAuthenticated('GET', '/api/markets/' . $market->marketID)
             ->assertResponseOk();
 
-        $geolocation2 = factory(Geolocation::class)->create([
-            'locationType' => 'market'
-            ]);
+        $geolocation2 = factory(Geolocation::class)->create();
         $this->callAuthenticated('POST', '/api/markets', [
             'geolocationID' => $geolocation2->geolocationID,
             'openingTime' => null,

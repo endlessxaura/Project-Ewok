@@ -56,8 +56,7 @@ class FarmController extends Controller
             if($geolocation->hasAttached() == false){
                 //Creating new farm
                 $farm = new Farm;
-                $farm->geolocationID = $request->input('geolocationID');
-                $geolocation->locationType = 'Farm';
+                $geolocation->location_type = 'App\Farm';
                 $farm->openingTime = $request->input('openingTime', null);
                 $farm->closingTime = $request->input('closingTime', null);
 
@@ -69,6 +68,7 @@ class FarmController extends Controller
 
                 //Saving
                 $farm->save();
+                $geolocation->location_id = $farm->farmID;
                 $geolocation->save();
                 return Responses::Created($farm->farmID);
             }

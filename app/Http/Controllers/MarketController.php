@@ -56,8 +56,7 @@ class MarketController extends Controller
             if($geolocation->hasAttached() == false){
                 //Creating new market
                 $market = new Market;
-                $market->geolocationID = $request->input('geolocationID');
-                $geolocation->locationType = 'Market';
+                $geolocation->location_type = 'App\Market';
                 $market->openingTime = $request->input('openingTime', null);
                 $market->closingTime = $request->input('closingTime', null);
 
@@ -69,6 +68,7 @@ class MarketController extends Controller
 
                 //Saving
                 $market->save();
+                $geolocation->location_id = $market->marketID;
                 $geolocation->save();
                 return Responses::Created($market->marketID);
             }
