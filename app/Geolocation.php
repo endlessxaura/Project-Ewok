@@ -11,13 +11,9 @@ class Geolocation extends Model
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['geolocationID', 'latitude', 'longitude', 'locationType'];
+    protected $fillable = ['geolocationID', 'latitude', 'longitude'];
 
     //Relationships
-    public function farm(){
-    	return $this->belongsTo('App\Farm', 'geolocationID', 'geolocationID');
-    }
-
     public function reviews(){
         return $this->hasMany('App\Review', 'geolocationID', 'geolocationID');
     }
@@ -27,26 +23,29 @@ class Geolocation extends Model
         return $this->hasMany('App\Picture', 'attachedID', 'geolocationID');
     }
 
+    public function users(){
+        return $this->belongsToMany('App\User', 'submission', 'geolocationID', 'userID')
+            ->withPivot('compassDirection', 'valid')
+            ->withTimestamps();
+    }
+
+    public function farms(){
+        return $this->hasMany('App\Farm', 'geolocationID', 'geolocationID');
+    }
+
+    public function markets(){
+        return $this->hasMany('App\Market', 'geolocationID', 'geolocationID');
+    }
+
     //Functions
     public function hasAttached(){
         //POST: returns true if the geolocation has something attached, false otherwise
         //NOTE: THIS MUST BE UPDATED FOR EACH TYPE OF LOCATION
-        if($this->locationType == 'farm'){
-            if($this->farm != null){
-                return true;
-            }
-            else{
-                return false;
-            }
+        $possibleRelationship = $this->hasMany('App\\'.$this->locationType, 'geolocationID', 'geolocationID')->get();
+        if($possibleRelationship->isEmpty()){
+            return false;
         }
-        if($this->locationType == 'market'){
-            if($this->market != null){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
+        else return true;
     }
 
     public function getPictures(){
@@ -125,26 +124,8 @@ class Geolocation extends Model
         //      farm
         //NOTE: This part is not modular. Remove this when exporting to a new project
         $information = array();
-        if($this->locationType == 'farm'){
-            $farm = $this->farm;
-            if($farm != null){
-                $information['farmID'] = $farm->farmID;
-                $information['locationType'] = "farm";
-                $information['name'] = $farm->name;
-                $information['openingTime'] = $farm->openingTime;
-                $information['closingTime'] = $farm->closingTime;
-            }
-        }
-        if($this->locationType == 'market'){
-            $market = $this->market;
-            if($market != null){
-                $information['marketID'] = $market->marketID;
-                $information['locationType'] = "market";
-                $information['name'] = $market->market;
-                $information['openingTime'] = $market->openingTime;
-                $information['closingTime'] = $market->closingTime;
-            }
-        }
+        $information['name'] = $this->name;
+        $information['description'] = $this->description;
         $images = $this->getPictures();
         $information['coverImage'] = count($images) > 0 ? $images[0]->filePath : null;
         $information['geolocationID'] = $this->geolocationID;

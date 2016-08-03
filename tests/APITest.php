@@ -8,6 +8,7 @@ use App\Geolocation;
 use App\Farm;
 use App\Review;
 use App\Market;
+use App\Location;
 
 class APITest extends TestCase
 {
@@ -36,8 +37,7 @@ class APITest extends TestCase
 
         $this->callAuthenticated('POST', '/api/geolocations', [
         	'latitude' => 87,
-        	'longitude' => 96,
-            'locationType' => 'farm'
+        	'longitude' => 96
         	])
         	->assertResponseStatus(201);
 
@@ -46,11 +46,6 @@ class APITest extends TestCase
 
         $this->callAuthenticated('GET', '/api/geolocations/1000')
         	->assertResponseStatus(410);
-
-        $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
-        	'lat' => 50
-        	])
-        	->assertResponseStatus(400);
 
         $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
         	'latitude' => 50,
@@ -62,7 +57,7 @@ class APITest extends TestCase
     		->assertResponseStatus(204);
     }
 
-    //Farm testing
+     //Farm testing
     public function testFarm(){
         $this->createAuthenticatedUser();
         $geolocation = factory(Geolocation::class)->create([
@@ -83,14 +78,12 @@ class APITest extends TestCase
             ]);
         $this->callAuthenticated('POST', '/api/farms', [
             'geolocationID' => $geolocation2->geolocationID,
-            'name' => 'HelloWorld',
             'openingTime' => null,
             'closingTime' => null
             ])
             ->assertResponseStatus(201);
 
         $this->callAuthenticated('PUT', '/api/farms/' . $farm->farmID, [
-            'name' => 'HelloWorld???',
             'apples' => 1
             ])
             ->assertResponseStatus(204);
@@ -174,14 +167,12 @@ class APITest extends TestCase
             ]);
         $this->callAuthenticated('POST', '/api/markets', [
             'geolocationID' => $geolocation2->geolocationID,
-            'name' => 'HelloWorld',
             'openingTime' => null,
             'closingTime' => null
             ])
             ->assertResponseStatus(201);
 
         $this->callAuthenticated('PUT', '/api/markets/' . $market->marketID, [
-            'name' => 'HelloWorld???',
             'apples' => 1
             ])
             ->assertResponseStatus(204);
@@ -189,7 +180,6 @@ class APITest extends TestCase
         $this->callAuthenticated('DELETE', '/api/farms/' . $market->marketID)
             ->assertResponseStatus(204);
     }
-
     //NOTE: PICTURES DO NOT HAVE A TESTER BECAUSE YOU CAN'T WITH LARAVEL
     //TO TEST THESE, USE THE TESTING ROUTES (which are commented out)
 }

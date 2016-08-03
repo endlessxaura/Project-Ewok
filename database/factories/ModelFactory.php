@@ -11,14 +11,6 @@
 |
 */
 
-$factory->define(App\Farm::class, function (Faker\Generator $faker) {
-	return [
-		'name' => $faker->name,
-		'openingTime' => $faker->time,
-		'closingTime' => $faker->time
-	];
-});
-
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'email' => $faker->safeEmail,
@@ -29,7 +21,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Geolocation::class, function (Faker\Generator $faker) {
 	return [
 		'latitude' => $faker->latitude,
-		'longitude' => $faker->longitude
+		'longitude' => $faker->longitude,
+		'name' => $faker->name,
+		'description' => $faker->sentence
 	];
 });
 
@@ -40,9 +34,22 @@ $factory->define(App\Review::class, function (Faker\Generator $faker) {
 	];
 });
 
-$factory->define(App\Market::class, function (Faker\Generator $faker) {
+$factory->define(App\Location::class, function (Faker\Generator $faker){
 	return [
 		'name' => $faker->name,
+		'description' => $faker->sentence
+	];
+});
+
+$factory->define(App\Market::class, function (Faker\Generator $faker) {
+	return [
+		'openingTime' => $faker->time,
+		'closingTime' => $faker->time
+	];
+});
+
+$factory->define(App\Farm::class, function (Faker\Generator $faker) {
+	return [
 		'openingTime' => $faker->time,
 		'closingTime' => $faker->time
 	];

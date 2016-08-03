@@ -20,12 +20,7 @@ class MarketController extends Controller
     {
         //PRE: $request may include name to search by name
         //POST: Returns all markets, including their geolocation
-        if($request->has('name')){
-            $markets = Market::where('name', '=', $request->input('name'))->get();
-        }
-        else{
-            $markets = Market::all();
-        }
+        $markets = Market::all();
         foreach($markets as $market){
             $market->geolocation;
         }
@@ -52,7 +47,6 @@ class MarketController extends Controller
     {
         //PRE: request must contain the following
         //      geolocationID
-        //      name
         //      openingTime
         //      closingTime
         //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)
@@ -64,7 +58,6 @@ class MarketController extends Controller
                 $market = new Market;
                 $market->geolocationID = $request->input('geolocationID');
                 $geolocation->locationType = 'market';
-                $market->name = $request->input('name');
                 $market->openingTime = $request->input('openingTime', null);
                 $market->closingTime = $request->input('closingTime', null);
 
@@ -130,19 +123,17 @@ class MarketController extends Controller
     {
         //PRE: $id must match a market's ID
         //      request may contain the following
-        //      name
         //      openingTime
         //      closingTime
         //POST: updates the market with the specified information
         //NOTE: GEOLOCATION CANNOT BE CHANGED
         $market = Market::find($id);
         if($market != null){
-            $market->name = $request->input('name', $market->name);
             $market->openingTime = $request->input('openingTime', $market->openingTime);
             $market->closingTime = $request->input('closingTime', $market->closingTime);
             
             //Updating each crop
-            $columns = Schema::getColumnListing('market');
+            $columns = Schema::getColumnListing('Market');
             for($i = 7; $i < sizeof($columns); $i++){
                 $market[$columns[$i]] = $request->input($columns[$i], 0);
             }

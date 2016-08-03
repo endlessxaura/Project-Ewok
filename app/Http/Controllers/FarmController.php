@@ -19,14 +19,8 @@ class FarmController extends Controller
      */
     public function index(Request $request)
     {
-        //PRE: $request may include name to search by name
         //POST: Returns all farms, including their geolocation
-        if($request->has('name')){
-            $farms = Farm::where('name', '=', $request->input('name'))->get();
-        }
-        else{
-            $farms = Farm::all();
-        }
+        $farms = Farm::all();
         foreach($farms as $farm){
             $farm->geolocation;
         }
@@ -53,7 +47,6 @@ class FarmController extends Controller
     {
         //PRE: request must contain the following
         //      geolocationID
-        //      name
         //      openingTime
         //      closingTime
         //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)
@@ -64,8 +57,7 @@ class FarmController extends Controller
                 //Creating new farm
                 $farm = new Farm;
                 $farm->geolocationID = $request->input('geolocationID');
-                $geolocation->locationType = 'farm';
-                $farm->name = $request->input('name');
+                $geolocation->locationType = 'Farm';
                 $farm->openingTime = $request->input('openingTime', null);
                 $farm->closingTime = $request->input('closingTime', null);
 
@@ -131,14 +123,12 @@ class FarmController extends Controller
     {
         //PRE: $id must match a farm's ID
         //      request may contain the following
-        //      name
         //      openingTime
         //      closingTime
         //POST: updates the farm with the specified information
         //NOTE: GEOLOCATION CANNOT BE CHANGED
         $farm = Farm::find($id);
         if($farm != null){
-            $farm->name = $request->input('name', $farm->name);
             $farm->openingTime = $request->input('openingTime', $farm->openingTime);
             $farm->closingTime = $request->input('closingTime', $farm->closingTime);
             
