@@ -22,6 +22,7 @@ Route::get('/', function(){
 //API
 $api = app('Dingo\Api\Routing\Router');
 
+//FINALIZED! DO NOT EDIT!
 $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 100, 'expires' => 5],function($api){
 	/////Documentation/////
 	$api->get('documentation', function(){
