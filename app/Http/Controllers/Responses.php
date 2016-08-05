@@ -34,6 +34,6 @@ class Responses{
 	}
 
 	public static function TooFar(){
-		return new Response(['error' => 'Too far away'], 409);
+		return new Response(['error' => 'Too far away'], 400);
 	}
 }

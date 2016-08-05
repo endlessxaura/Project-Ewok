@@ -115,4 +115,24 @@ class Geolocation extends Model
         $information['geolocationID'] = $this->geolocationID;
         return $information;
     }
+
+    public function testValidity(){
+        //POST: tests the validity of the geolocation and deletes it if it is not valid
+        $validations = array();
+        foreach ($this->users as $user){
+            $validations[] = $user->pivot->valid;
+        }
+        $validity = 0;
+        foreach($validations as $validation){
+            $validity += $validation;
+        }
+        if($validity < count($validations) * .5){        
+            $this->users()->sync([]);
+            $reviews = $this->reviews;
+            foreach($reviews as &$review){
+                $review->delete();
+            }
+            $this->delete();
+        }
+    }
 }

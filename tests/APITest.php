@@ -41,7 +41,7 @@ class APITest extends TestCase
         	'latitude' => 87,
         	'longitude' => 96
         	])
-        	->assertResponseStatus(409);
+        	->assertResponseStatus(400);
 
         $this->callAuthenticated('POST', '/api/geolocations', [
             'submitterLatitude' => 87,
@@ -65,8 +65,15 @@ class APITest extends TestCase
         	])
         	->assertResponseStatus(204);
 
-    	$this->callAuthenticated('DELETE', '/api/geolocations/' . $geolocation->geolocationID)
-    		->assertResponseStatus(204);
+    	// $this->callAuthenticated('DELETE', '/api/geolocations/' . $geolocation->geolocationID)
+    	// 	->assertResponseStatus(204);
+
+        $this->callAuthenticated('POST', '/api/geolocations/' . $geolocation->geolocationID . '/validate', [
+            'submitterLatitude' => $geolocation->latitude + .001,
+            'submitterLongitude' => $geolocation->longitude + .001,
+            'valid' => 0
+            ])
+            ->assertResponseStatus(204);
     }
 
      //Farm testing

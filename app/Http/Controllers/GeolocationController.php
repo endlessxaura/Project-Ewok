@@ -342,35 +342,37 @@ class GeolocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id) //Currently unavailable
         //POST: destroys the geolocation
     {
-        $geolocation = Geolocation::find($id);
-        if($geolocation != null){
-            $geolocation->users()->sync([]);
-            $reviews = $geolocation->reviews;
-            foreach($reviews as &$review){
-                $review->delete();
-            }
-            $geolocation->delete();
-            return Responses::Updated();
-        }
-        else{
-            return Responses::DoesNotExist('Geolocation');
-        }
+        // $geolocation = Geolocation::find($id);
+        // if($geolocation != null){
+        //     $geolocation->users()->sync([]);
+        //     $reviews = $geolocation->reviews;
+        //     foreach($reviews as &$review){
+        //         $review->delete();
+        //     }
+        //     $geolocation->delete();
+        //     return Responses::Updated();
+        // }
+        // else{
+        //     return Responses::DoesNotExist('Geolocation');
+        // }
     }
 
     public function validation(Request $request, $id){
         //PRE: request must contain the following
-        //      compassDirection
         //      valid
         //      latitude (within half a mile of geolocation latitude)
         //      longitude (within half a mile of geolocation longitude)
+        //      request may include compassDirection
         //POST: creates a submission about whether or not it is valid
         $geolocation = Geolocation::find($id);
+        $latitude = $geolocation->latitude;
+        $longitude = $geolocation->longitude;
         $submitLat = $request->input('submitterLatitude');
         $submitLong = $request->input('submitterLongitude');
-        if($request->input('valid') == null || $request->input('compassDirection') == null || $submitLat == null || $submitLong == null){
+        if($request->input('valid') === null || $submitLat == null || $submitLong == null){
             return Responses::BadRequest();
         }
         if(Geolocation::distance($latitude, $longitude, $submitLat, $submitLong, "m") > .5){
@@ -393,6 +395,7 @@ class GeolocationController extends Controller
                     'valid' => $request->input('valid')
                 ]);
             }
+            $geolocation->testValidity();
             return Responses::Updated();
         }
         else{
