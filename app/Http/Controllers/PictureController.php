@@ -30,7 +30,7 @@ class PictureController extends Controller
                 ->get();
         }
         else{
-            return Picture::all();
+            return Picture::paginate(50);
         }
     }
 
