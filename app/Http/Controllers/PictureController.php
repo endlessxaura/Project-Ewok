@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Storage;
 use Validator;
 use File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureController extends Controller
 {
@@ -57,7 +58,7 @@ class PictureController extends Controller
         //      attachedID = the ID of the attached model
         //POST: stores the picture in the DB
         $validator = Validator::make($request->all(), [
-            'image' => 'required|file',
+            'image' => 'required|file|mimes:jpeg,bmp,png,gif',
             'attachedModel' => 'required',
             'attachedID' => 'required|integer'
             ]);
@@ -137,48 +138,47 @@ class PictureController extends Controller
         //      attachedID = the ID of the attached model
         //POST: stores the picture in the DB
 
-        // $picture = Picture::find($id);
-        // if($picture != null){
-        //     $validator = Validator::make($request->all(), [
-        //         'image' => 'required|file'
-        //         ]);
-        //     if(!$validator->fails() && $request->hasFile('image') && $request->file('image')->isValid()){
-        //         //Updating pic info
-        //         $picture->attached_id = $request->input('attachedID', $picture->attached_id);
-        //         $picture->attached_type = $request->input('attachedModel', $picture->attached_type);
+        $picture = Picture::find($id);
+        if($picture != null){
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|file|mimes:jpeg,bmp,png,gif'
+                ]);
+            if(!$validator->fails() && $request->hasFile('image') && $request->file('image')->isValid()){
+                //Updating pic info
+                $picture->attached_id = $request->input('attachedID', $picture->attached_id);
+                $picture->attached_type = $request->input('attachedModel', $picture->attached_type);
 
-        //         //Naming the file
-        //         $file = $request->file('image');
-        //         $attachedItem = $picture->attached;
-        //         if($attachedItem == null){
-        //             return "Hello";
-        //             return Responses::BadRequest();
-        //         }
-        //         $modelName = substr($request->input('attachedModel'), 4);
-        //         $fileName = $modelName . "/" . $attachedItem->getKey() . '/' . time() . $file->getClientOriginalName();
+                //Naming the file
+                $file = $request->file('image');
+                $attachedItem = $picture->attached;
+                if($attachedItem == null){
+                    return Responses::BadRequest();
+                }
+                $modelName = substr($request->input('attachedModel'), 4);
+                $fileName = $modelName . "/" . $attachedItem->getKey() . '/' . time() . $file->getClientOriginalName();
                 
 
-        //         //Storing the image
-        //         Storage::put(
-        //             $fileName,
-        //             File::get($file)
-        //             );
+                //Storing the image
+                Storage::put(
+                    $fileName,
+                    File::get($file)
+                    );
 
-        //         //Remove original image
-        //         Storage::delete($picture->filePath);
+                //Remove original image
+                Storage::delete($picture->filePath);
 
-        //         //Updating model and saving
-        //         $picture->filePath = $fileName;
-        //         $picture->save();
-        //         return Responses::Created($picture->pictureID);
-        //     }
-        //     else{
-        //         return Responses::BadRequest();
-        //     }
-        // }
-        // else{
-        //     return Responses::DoesNotExist();
-        // }
+                //Updating model and saving
+                $picture->filePath = $fileName;
+                $picture->save();
+                return Responses::Created($picture->pictureID);
+            }
+            else{
+                return Responses::BadRequest();
+            }
+        }
+        else{
+            return Responses::DoesNotExist();
+        }
 
     }
     /**

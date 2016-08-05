@@ -26,6 +26,11 @@ class GeolocationController extends Controller
         //      unit (default = miles) = the unit you are looking for
         //          m = miles, n = nautical miles, k = kilometers
 
+        //      if none of the above is defined, you must paginate the results
+        //      the request should have page, which will pull 50 results from that point
+        //      for example, page=1 will grab the first 50, page=2 the second 50, etc.
+        //      If the search is narrow enough, you probably won't need more than 50, though
+
         //      the request may have the following      
         //      locationType (farm, market, etc)
         //      name (filters for the name)
@@ -51,7 +56,7 @@ class GeolocationController extends Controller
             $unit = $request->input('unit', 'm');
             $radiusFlag = true;
         }
-        if($request->input('location_type') != null){
+        if($request->input('locationType') != null){
             $location_type = $request->input('locationType');
             $typeFlag = true;
         }
@@ -81,11 +86,11 @@ class GeolocationController extends Controller
         }
         else if($typeFlag){
             $geolocations = Geolocation::where('location_type', '=', $location_type)
-                ->get()
+                ->paginate(50)
                 ->all();
         }
         else{
-            $geolocations = Geolocation::all()->all();
+            $geolocations = Geolocation::paginate(50)->all();
         }        
 
         //Filtering options
@@ -180,8 +185,10 @@ class GeolocationController extends Controller
     public function store(Request $request)
     {
         //PRE: request should contain the following
-        //      latitude
-        //      longitude
+        //      latitude 
+        //      longitude 
+        //      submitterLongitude (cannot be beyond half a mile of longitude)
+        //      submitterLatitude (cannot be beyond half a mile of latitude)
         //      locationType
         //      name
         //      description
@@ -190,8 +197,13 @@ class GeolocationController extends Controller
         $geolocation = new Geolocation;
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        if($latitude == null || $longitude == null){
+        $submitLat = $request->input('submitterLatitude');
+        $submitLong = $request->input('submitterLongitude');
+        if($latitude == null || $longitude == null || $submitLat == null || $submitLong == null){
             return Responses::BadRequest();
+        }
+        if(Geolocation::distance($latitude, $longitude, $submitLat, $submitLong, "m") > .5){
+            return Responses::TooFar();
         }
         $geolocation->latitude = $latitude;
         $geolocation->longitude = $longitude;
@@ -200,6 +212,8 @@ class GeolocationController extends Controller
         $geolocation->description = $request->input('description');
         $geolocation->save();
         $geolocation->users()->attach(Auth::user()->userID, [
+            'latitude' => $request->input('submitterLatitude'),
+            'longitude' => $request->input('submitterLongitude'),
             'compassDirection' => $request->input('compassDirection'),
             'valid' => 1
             ]);
@@ -265,30 +279,52 @@ class GeolocationController extends Controller
     public function update(Request $request, $id)
     {
         //PRE: request may contain the following
-        //      latitude
-        //      longitude
+        //      latitude (cannot be beyond half a mile of original location)
+        //      longitude (cannot be beyond half a mile of original location)
         //      locationType
         //      name
         //      description
         //      compassDirection
         //      $id must match a geolocationID
+
+        //      request MUST contain the following
+        //      submitterLatitude (within half a mile of geolocation latitude)
+        //      submitterLongitude (within half a mile of geolocation longitude)
+
         //POST: overwrites the previous data with the new values
         $geolocation = Geolocation::find($id);
+        $latitude = $request->input('latitude', $geolocation->latitude);
+        $longitude = $request->input('longitude', $geolocation->longitude);
+        $submitLat = $request->input('submitterLatitude');
+        $submitLong = $request->input('submitterLongitude');
+        if($submitLat == null || $submitLong == null){
+            return Responses::BadRequest();
+        }
+        if(Geolocation::distance($geolocation->latitude, $geolocation->longitude, $latitude, $longitude, "m") > .5){
+            return Responses::TooFar();
+        }
+        if(Geolocation::distance($geolocation->latitude, $geolocation->longitude, $submitLat, $submitLong, "m") > .5){
+            return Responses::TooFar();
+        }
         if($geolocation != null){
-            $geolocation->latitude = $request->input('latitude', $geolocation->latitude);
-            $geolocation->longitude = $request->input('longitude', $geolocation->longitude);
+            $geolocation->latitude = $latitude;
+            $geolocation->longitude = $longitude;
             $geolocation->location_type = $request->input('locationType', $geolocation->locationType);
             $geolocation->name = $request->input('name', $geolocation->name);
             $geolocation->description = $request->input('description', $geolocation->description);
             $geolocation->save();
             if(!($geolocation->users->contains(Auth::user()->userID))){    
                 $geolocation->users()->attach(Auth::user()->userID, [
+                    'latitude' => $submitLat,
+                    'longitude' => $submitLong,
                     'compassDirection' => $request->input('compassDirection'),
                     'valid' => 1
                 ]);              
             }
             else{
                 $geolocation->users()->updateExistingPivot(Auth::user()->userID, [
+                    'latitude' => $submitLat,
+                    'longitude' => $submitLong,
                     'compassDirection' => $request->input('compassDirection', $geolocation->users->get(Auth::user()->userID)->pivot->compassDirection),
                     'valid' => 1
                 ]);
@@ -325,22 +361,34 @@ class GeolocationController extends Controller
     }
 
     public function validation(Request $request, $id){
-        //PRE: request must contain valid as a bool
-        //      request must contain compassDirection
-        //POST: creates a submission about whether or not it is balid
+        //PRE: request must contain the following
+        //      compassDirection
+        //      valid
+        //      latitude (within half a mile of geolocation latitude)
+        //      longitude (within half a mile of geolocation longitude)
+        //POST: creates a submission about whether or not it is valid
         $geolocation = Geolocation::find($id);
-        if($request->input('valid') == null || $request->input('compassDirection') == null){
+        $submitLat = $request->input('submitterLatitude');
+        $submitLong = $request->input('submitterLongitude');
+        if($request->input('valid') == null || $request->input('compassDirection') == null || $submitLat == null || $submitLong == null){
             return Responses::BadRequest();
+        }
+        if(Geolocation::distance($latitude, $longitude, $submitLat, $submitLong, "m") > .5){
+            return Responses::TooFar();
         }
         if($geolocation != null){
             if(!($geolocation->users->contains(Auth::user()->userID))){    //This breaks phpunit?
                 $geolocation->users()->attach(Auth::user()->userID, [
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
                     'compassDirection' => $request->input('compassDirection'),
                     'valid' => $request->input('valid')
                 ]);              
             }
             else{
                 $geolocation->users()->updateExistingPivot(Auth::user()->userID, [
+                    'latitude' => $request->input('submitterLatitude'),
+                    'longitude' => $request->input('submitterLongitude'),
                     'compassDirection' => $request->input('compassDirection'),
                     'valid' => $request->input('valid')
                 ]);

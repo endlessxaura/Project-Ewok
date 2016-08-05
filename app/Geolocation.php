@@ -20,7 +20,7 @@ class Geolocation extends Model
 
     public function users(){
         return $this->belongsToMany('App\User', 'submission', 'geolocationID', 'userID')
-            ->withPivot('compassDirection', 'valid')
+            ->withPivot('compassDirection', 'valid', 'latitude', 'longitude')
             ->withTimestamps();
     }
 

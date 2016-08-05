@@ -10,68 +10,23 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+//Webroutes
+$dispatcher = app('Dingo\Api\Dispatcher');	//This allows us to make internal API requests
 
-//Semi-broken webroutes
-// if(!isset($_SESSION)){
-// 	session_start();
-// }
-// use Illuminate\Http\Request;
-
-
-// $dispatcher = app('Dingo\Api\Dispatcher');
-
-// Route::get('/', function (Request $request) {
-// 	return $request;
-// 	echo $_SESSION['token'];
-//     return view('welcome');
-// });
-
-// Route::get('login', function(){
-// 	return view('auth.login');
-// });
-
-// Route::post('login', function(Request $request) use ($dispatcher){
-// 	$response = $dispatcher
-// 		->with([
-// 			'email' => $request->input('email'),
-// 			'password' => $request->input('password')
-// 		])
-// 		->post('api/authenticate');
-// 	$token = $response['token'];
-// 	$_SESSION['token'];
-// 	return redirect('/')->withCookie("token", $token, 60)->header('Authorization', $token);
-// });
-
-// Route::get('register', function(){
-// 	return view('auth.register');
-// });
-
-// Route::post('register', function(Request $request) use ($dispatcher){
-// 	$dispatcher
-// 		->with([
-// 			'email' => $request->input('email'),
-// 			'password' => $request->input('password'),
-// 			'password_confirmation' => $request->input('password_confirmation')
-// 		])
-// 		->post('api/register');
-// 	return redirect('/');
-// });
-
-//Test routes
-Route::get('upload', function() {
-  return view('upload');
+//Home page
+Route::get('/', function(){
+	return view('MapView');
 });
 
-Route::post('upload', '\App\Http\Controllers\PictureController@store');
 
 //API
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function($api){
+$api->version('v1', ['middleware' => 'api.throttle', 'limit' => 100, 'expires' => 5],function($api){
 	/////Documentation/////
 	$api->get('documentation', function(){
-		return "in progress";
-	});
+			return view('Documentation');
+		});
 
 	/////Authentication/////
 	$api->post('register', 'App\Http\Controllers\AuthenticateController@register');
@@ -114,7 +69,7 @@ $api->version('v1', function($api){
 
 		//Pictures
 		$api->post('pictures', 'App\Http\Controllers\PictureController@store');
-		$api->put('pictures/{id}', 'App\Http\Controllers\PictureController@update');
+		$api->post('pictures/{id}', 'App\Http\Controllers\PictureController@update');
 		$api->delete('pictures/{id}', 'App\Http\Controllers\PictureController@destroy');
 
 		//Reviews

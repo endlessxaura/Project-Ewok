@@ -32,4 +32,8 @@ class Responses{
 	public static function AlreadyExists($object = 'The object'){
 		return new Response(['error' => $object . ' already exists'], 409);
 	}
+
+	public static function TooFar(){
+		return new Response(['error' => 'Too far away'], 409);
+	}
 }

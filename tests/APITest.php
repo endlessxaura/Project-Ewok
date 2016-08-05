@@ -36,10 +36,20 @@ class APITest extends TestCase
         	->assertResponseOk();
 
         $this->callAuthenticated('POST', '/api/geolocations', [
+            'submitterLatitude' => 100,
+            'submitterLongitude' => 100,
         	'latitude' => 87,
         	'longitude' => 96
         	])
-        	->assertResponseStatus(201);
+        	->assertResponseStatus(409);
+
+        $this->callAuthenticated('POST', '/api/geolocations', [
+            'submitterLatitude' => 87,
+            'submitterLongitude' => 96,
+            'latitude' => 87,
+            'longitude' => 96
+            ])
+            ->assertResponseStatus(201);
 
         $this->callAuthenticated('GET', '/api/geolocations/' . $geolocation->geolocationID)
         	->assertResponseOk();
@@ -48,8 +58,10 @@ class APITest extends TestCase
         	->assertResponseStatus(410);
 
         $this->callAuthenticated('PUT', '/api/geolocations/' . $geolocation->geolocationID, [
-        	'latitude' => 50,
-        	'longitude' => 50
+        	'submitterLatitude' => $geolocation->latitude + .001,
+            'submitterLongitude' => $geolocation->longitude + .001,
+            'latitude' => $geolocation->latitude,
+        	'longitude' => $geolocation->longitude
         	])
         	->assertResponseStatus(204);
 
@@ -97,46 +109,43 @@ class APITest extends TestCase
         $this->callAuthenticated('GET', '/api/reviews')
             ->assertResponseOk();
 
+        $this->callAuthenticated('GET', '/api/reviews', [
+            'geolocationID' => $geolocation->geolocationID
+            ])
+            ->assertResponseOk();
+
         $this->callAuthenticated('GET', '/api/reviews/' . $review->reviewID)
             ->assertResponseOk();
 
-        //For some reason, the following tests fail because it can't parse the token
-        //TBH, I have no idea why. Test these using postman or another request builder
+        $geolocation2 = factory(Geolocation::class)->create();
+        $this->callAuthenticated('POST', '/api/reviews', [
+            'geolocationID' => $geolocation2->geolocationID,
+            'comment' => 'fudge',
+            'vote' => 1
+            ])
+            ->assertResponseStatus(201);
 
-        // $geolocation2 = factory(Geolocation::class)->create([
-        //     'locationType' => 'Farm'
-        //     ]);
-        // $this->callAuthenticated('POST', '/api/reviews', [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation2->geolocationID,
-        //     'comment' => 'fudge',
-        //     'vote' => 1
-        //     ])
-        //     ->assertResponseStatus(201);
+        $this->callAuthenticated('POST', '/api/reviews', [
+            'geolocationID' => $geolocation->geolocationID,
+            'comment' => 'Not gonna work'
+            ])
+            ->assertResponseStatus(409);
 
-        // $this->callAuthenticated('POST', '/api/reviews', [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation->geolocationID,
-        //     'comment' => 'Not gonna work'
-        //     ])
-        //     ->assertResponseStatus(409);
+        $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
+            'geolocationID' => $geolocation->geolocationID,
+            'comment' => 'Fooeybar'
+            ])
+            ->assertResponseStatus(204);
 
-        // $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation->geolocationID,
-        //     'comment' => 'Fooeybar'
-        //     ])
-        //     ->assertResponseStatus(204);
+        $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
+            'geolocationID' => $geolocation2->geolocationID,
+            'comment' => 'Fooeybar',
+            'rating' => 50
+            ])
+            ->assertResponseStatus(400);
 
-        // $this->callAuthenticated('PUT', '/api/reviews/' . $review->reviewID, [
-        //     'userID' => $this->user->userID,
-        //     'geolocationID' => $geolocation2->geolocationID,
-        //     'comment' => 'Fooeybar'
-        //     ])
-        //     ->assertResponseStatus(409);
-
-        // $this->callAuthenticated('DELETE', '/api/reviews/' . $review->reviewID)
-        //     ->assertResponseStatus(204);
+        $this->callAuthenticated('DELETE', '/api/reviews/' . $review->reviewID)
+            ->assertResponseStatus(204);
     }
 
     //Market testing

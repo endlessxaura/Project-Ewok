@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
+use Illuminate\Http\Response;
 use Auth;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -60,7 +61,7 @@ class AuthenticateController extends Controller
             return $this->response->error('Something went wrong');
         }
 
-        return $refreshedToken;
+        return response()->json(compact('token'));
     }
 
     public function destroyToken(Request $request){

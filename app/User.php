@@ -21,7 +21,7 @@ class User extends Authenticatable
 
     public function geolocations(){
         return $this->belongsToMany('App\Geolocation', 'submission', 'userID', 'geolocationID')
-            ->withPivot('compassDirection', 'valid')
+            ->withPivot('compassDirection', 'valid', 'latitude', 'longitude')
             ->withTimestamps();
     }
 
