@@ -144,17 +144,13 @@ class PictureController extends Controller
                 'image' => 'required|file|mimes:jpeg,bmp,png,gif'
                 ]);
             if(!$validator->fails() && $request->hasFile('image') && $request->file('image')->isValid()){
-                //Updating pic info
-                $picture->attached_id = $request->input('attachedID', $picture->attached_id);
-                $picture->attached_type = $request->input('attachedModel', $picture->attached_type);
-
                 //Naming the file
                 $file = $request->file('image');
                 $attachedItem = $picture->attached;
                 if($attachedItem == null){
                     return Responses::BadRequest();
                 }
-                $modelName = substr($request->input('attachedModel'), 4);
+                $modelName = substr($picture->attachedModel, 4);
                 $fileName = $modelName . "/" . $attachedItem->getKey() . '/' . time() . $file->getClientOriginalName();
                 
 
