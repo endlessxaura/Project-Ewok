@@ -26,16 +26,16 @@ class ReviewController extends Controller
             if($request->input('userID', null)){
                 return Review::where('geolocationID', '=', $request->input('geolocationID'))
                     ->where('userID', '=', $request->input('userID'))
-                    ->get();
+                    ->paginate(50);
             }
             return Review::where('geolocationID', '=', $request->input('geolocationID'))
-                ->get();
+                ->paginate(50);
         }
         if($request->input('userID', null)){
             return Review::where('userID', '=', $request->input('userID'))
-                ->get();
+                ->paginate(50);
         }
-        return Review::all();
+        return Review::paginate(50)->all();
     }
 
     /**
@@ -56,8 +56,8 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //PRE: $request MUST contain a comment, userID, and geolocationID
-        //     $request may contain rating (0 to 5)
+        //PRE: $request MUST contain a rating (0 to 5) and geolocationID
+        //     $request may contain comment
         //      The user cannot have a review for that geolocation already
         //POST: stores the specified review in the database
         $userID = Auth::user()->userID;
@@ -127,7 +127,7 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {        
-        //PRE: $request may contain a comment, userID, and geolocationID
+        //PRE: $request may contain a comment and geolocationID
         //     $request may contain rating (0 to 5)
         //      The user MUST own the review
         //POST: stores the specified review in the database

@@ -18,13 +18,19 @@ class MarketController extends Controller
      */
     public function index(Request $request)
     {
-        //PRE: $request may include name to search by name
+        //PRE: $request may include geolocationID to find a specific one
         //POST: Returns all markets, including their geolocation
-        $markets = Market::all();
-        foreach($markets as $market){
-            $market->geolocation;
+        if($request->input('geolocationID') != null){
+            return Market::where('geolocationID', '=', $request->input('geolocationID'))
+                ->get();
         }
-        return $markets;
+        else{
+            $markets = Market::paginate(50);
+            foreach($markets as $market){
+                $market->geolocation;
+            }
+            return $markets;
+        }
     }
 
     /**
@@ -45,8 +51,8 @@ class MarketController extends Controller
      */
     public function store(Request $request)
     {
-        //PRE: request must contain the following
-        //      geolocationID
+        //PRE: request may contain the following
+        //      geolocationID (required)
         //      openingTime
         //      closingTime
         //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)

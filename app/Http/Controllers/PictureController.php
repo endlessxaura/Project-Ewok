@@ -134,8 +134,6 @@ class PictureController extends Controller
     {
         //PRE: $request may contain the following
         //      image (required)
-        //      attachedModel (model being attached to, eg. App\Farm)
-        //      attachedID = the ID of the attached model
         //POST: stores the picture in the DB
 
         $picture = Picture::find($id);

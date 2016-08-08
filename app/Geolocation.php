@@ -132,6 +132,7 @@ class Geolocation extends Model
             foreach($reviews as &$review){
                 $review->delete();
             }
+            $this->location->delete();
             $this->delete();
         }
     }

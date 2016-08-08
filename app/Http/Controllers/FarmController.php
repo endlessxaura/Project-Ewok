@@ -19,12 +19,19 @@ class FarmController extends Controller
      */
     public function index(Request $request)
     {
+        //PRE: $request may include a geolocationID to narrow their search
         //POST: Returns all farms, including their geolocation
-        $farms = Farm::all();
-        foreach($farms as $farm){
-            $farm->geolocation;
+        if($request->input('geolocationID') != null){
+            return Farm::where('geolocationID', '=', $request->input('geolocationID'))
+                ->get();
         }
-        return $farms;
+        else{
+            $farms = Farm::paginate(50);  
+            foreach($farms as $farm){
+                $farm->geolocation;
+            }
+            return $farms;
+        }
     }
 
     /**
@@ -45,8 +52,8 @@ class FarmController extends Controller
      */
     public function store(Request $request)
     {
-        //PRE: request must contain the following
-        //      geolocationID
+        //PRE: request may contain the following
+        //      geolocationID (required)
         //      openingTime
         //      closingTime
         //      A lot of different crops and livestock as booleans (1 for available) (see DB for all of them)
