@@ -97,6 +97,7 @@ class AuthenticateController extends Controller
         $user->reviews;
         $user->geolocations;
         $user->pictures;
+        $user->password = null;
 
         // the token is valid and we have found the user via the sub claim
         return $user;
