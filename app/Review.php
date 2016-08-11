@@ -12,7 +12,7 @@ class Review extends Model
     public $timestamps = true;
 
     //Mass assignment
-    protected $fillable = ['userID', 'comment', 'vote', 'geolocationID'];
+    protected $fillable = ['userID', 'comment', 'rating', 'geolocationID'];
 
     //Relationships
     public function user(){

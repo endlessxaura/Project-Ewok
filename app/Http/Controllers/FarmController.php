@@ -26,7 +26,7 @@ class FarmController extends Controller
                 ->get();
         }
         else{
-            $farms = Farm::paginate(50);  
+            $farms = Farm::all();
             foreach($farms as $farm){
                 $farm->geolocation;
             }

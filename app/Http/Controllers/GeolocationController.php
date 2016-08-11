@@ -26,11 +26,6 @@ class GeolocationController extends Controller
         //      unit (default = miles) = the unit you are looking for
         //          m = miles, n = nautical miles, k = kilometers
 
-        //      if none of the above is defined, you must paginate the results
-        //      the request should have page, which will pull 50 results from that point
-        //      for example, page=1 will grab the first 50, page=2 the second 50, etc.
-        //      If the search is narrow enough, you probably won't need more than 50, though
-
         //      the request may have the following      
         //      locationType (farm, market, etc)
         //      name (filters for the name)
@@ -86,11 +81,10 @@ class GeolocationController extends Controller
         }
         else if($typeFlag){
             $geolocations = Geolocation::where('location_type', '=', $location_type)
-                ->paginate(50)
-                ->all();
+                ->get();
         }
         else{
-            $geolocations = Geolocation::paginate(50)->all();
+            $geolocations = Geolocation::all();
         }        
 
         //Filtering options
@@ -199,7 +193,7 @@ class GeolocationController extends Controller
         $longitude = $request->input('longitude');
         $submitLat = $request->input('submitterLatitude');
         $submitLong = $request->input('submitterLongitude');
-        if($latitude == null || $longitude == null || $submitLat == null || $submitLong == null){
+        if($latitude === null || $longitude === null || $submitLat === null || $submitLong === null){
             return Responses::BadRequest();
         }
         if(Geolocation::distance($latitude, $longitude, $submitLat, $submitLong, "m") > .5){
@@ -247,9 +241,7 @@ class GeolocationController extends Controller
                 ]);
             }
             else{
-                foreach($geolocations as $geolocation){
-                    $geolocation->information();
-                }
+                $geolocation->information();
                 return $geolocation;
             }
         }

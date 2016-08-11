@@ -22,20 +22,21 @@ class ReviewController extends Controller
         //      $request may contain a userID to pull a list of all reviews that user made
         //      These may be combined, as well
         //POST: returns a list of reviews, drilling down by geolocation and user if provided
+        //      paginates if none of the options are chosen
         if($request->input('geolocationID', null)){
             if($request->input('userID', null)){
                 return Review::where('geolocationID', '=', $request->input('geolocationID'))
                     ->where('userID', '=', $request->input('userID'))
-                    ->paginate(50);
+                    ->get();
             }
             return Review::where('geolocationID', '=', $request->input('geolocationID'))
-                ->paginate(50);
+                ->get();
         }
         if($request->input('userID', null)){
             return Review::where('userID', '=', $request->input('userID'))
-                ->paginate(50);
+                ->get();
         }
-        return Review::paginate(50)->all();
+        return Review::all();
     }
 
     /**

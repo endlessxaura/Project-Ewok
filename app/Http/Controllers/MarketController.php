@@ -25,7 +25,7 @@ class MarketController extends Controller
                 ->get();
         }
         else{
-            $markets = Market::paginate(50);
+            $markets = Market::get();
             foreach($markets as $market){
                 $market->geolocation;
             }

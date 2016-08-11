@@ -35,7 +35,9 @@ class AuthenticateController extends Controller
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:user,email',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'firstName' => 'required',
+            'lastName' => 'required'
             ]);
 
         if($validator->fails()){
@@ -44,7 +46,9 @@ class AuthenticateController extends Controller
 
         User::create([
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'firstName' => $request->input('firstName'),
+            'lastName' => $request->input('lastName')
             ]);
     }
 
@@ -69,7 +73,7 @@ class AuthenticateController extends Controller
         if(!$user){
             $this->response->error('Token is invalid');
         }  
-        $user->delete();
+        JWTAuth::parseToken()->invalidate();
     }
 
     public function getAuthenticatedUser()

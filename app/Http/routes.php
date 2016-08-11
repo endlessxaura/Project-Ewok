@@ -37,6 +37,20 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 100, 'expires' =
 
 	/////Reading data/////
 
+	//Getting other users
+	$api->get('users/{id}', function($id){
+		//POST: Simply returns the user matching ID
+		//Made because I realize we might need in, mid-production
+		$user = App\User::find($id);
+        if($user != null){
+        	$user->password = null;
+            return $user;
+        }
+        else{
+            return Responses::DoesNotExist('User');
+        }
+	});
+
 	//Geolocations
 	$api->get('geolocations', 'App\Http\Controllers\GeolocationController@index');
 	$api->get('geolocations/{id}', 'App\Http\Controllers\GeolocationController@show');
