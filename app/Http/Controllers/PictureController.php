@@ -23,10 +23,13 @@ class PictureController extends Controller
     {
         //PRE: request may contain 
         //      id (The id of the model you are looking for)
-        //      model (the model you are looking for, eg. App\Farm)
+        //      model (the model you are looking for, eg. farm)
         if($request->has('id') && $request->has('model')){
+            $model = $request->input('model');
+            $model = ucfirst($model);
+            $model = "App\\" . $model;
             return Picture::where('attached_id', '=', $request->input('id'))
-                ->where('attached_type', '=', $request->input('model'))
+                ->where('attached_type', '=', $model)
                 ->get();
         }
         else{
@@ -59,27 +62,24 @@ class PictureController extends Controller
         //POST: stores the picture in the DB
         $validator = Validator::make($request->all(), [
             'image' => 'required|file|mimes:jpeg,bmp,png,gif',
-            'attachedModel' => 'required',
+            'attachedModel' => 'required| in:geolocation,farm,market,review, user',
             'attachedID' => 'required|integer'
             ]);
         if(!$validator->fails() && $request->hasFile('image') && $request->file('image')->isValid()){
             //Formatting attached model
             $attachedModel = $request->input('attachedModel');
             $attachedModel = ucfirst($attachedModel);
-            $atachedModel = "App/" . $attachedModel;
+            $attachedModel = "App\\" . $attachedModel;
 
             //Creating the model
             $picture = Picture::create([
                 'attached_id' => $request->input('attachedID'),
-                'attached_type' => $request->input('attachedModel')
+                'attached_type' => $attachedModel
                 ]);
 
             //Naming the file
             $file = $request->file('image');
             $attachedItem = $picture->attached;
-            if($attachedItem == null){
-                return Responses::BadRequest();
-            }
             $modelName = substr($attachedModel, 4);
             $fileName = $modelName . "/" . $attachedItem->getKey() . '/' . time() . $file->getClientOriginalName();
 
@@ -105,13 +105,19 @@ class PictureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         //POST: returns the specific picture asked for
         $picture = Picture::find($id);
         if($picture != null){
-            $image = $picture->getImagePath();
-            return response()->file($image);
+            if($request->input('model', 0) != 1){
+                $image = $picture->getImagePath();
+                $file = File::get($image);
+                return response()->file($image);
+            }
+            else{
+                return $picture;
+            }
         }
         else{
             return Responses::DoesNotExist();
@@ -198,6 +204,33 @@ class PictureController extends Controller
         }
         else{
             return Responses::DoesNotExist();
+        }
+    }
+
+    public function showFirst(Request $request){
+        //PRE: request may contain 
+        //      id (The id of the model you are looking for)
+        //      model (the model you are looking for, eg. farm)
+        //POST: shows the first picture of that model
+        if($request->has('id') && $request->has('model')){
+            $model = $request->input('model');
+            $model = ucfirst($model);
+            $model = "App\\" . $model;
+            $pictures = Picture::where('attached_id', '=', $request->input('id'))
+                ->where('attached_type', '=', $model)
+                ->get();
+            $picture = $pictures->first();
+            if($picture != null){
+                $image = $picture->getImagePath();
+                $file = File::get($image);
+                return response()->file($image);
+            }
+            else{
+                return Responses::DoesNotExist("Pictures");
+            }
+        }
+        else{
+            return Responses::BadRequest();
         }
     }
 }

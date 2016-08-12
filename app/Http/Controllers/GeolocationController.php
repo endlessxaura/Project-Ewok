@@ -156,7 +156,7 @@ class GeolocationController extends Controller
             foreach($geolocations as &$geolocation){
                 $geolocation->information();
             }
-            return $geolocations;
+            return response()->json(["geolocations" => $geolocations]);
         }
     }
 

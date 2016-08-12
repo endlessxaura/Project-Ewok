@@ -58,6 +58,7 @@ $api->version('v1', ['middleware' => 'api.throttle', 'limit' => 100, 'expires' =
 	//Pictures
 	$api->get('pictures', 'App\Http\Controllers\PictureController@index');
 	$api->get('pictures/{id}', 'App\Http\Controllers\PictureController@show');
+	$api->get('firstPicture', 'App\Http\Controllers\PictureController@showFirst');
 
 	//Reviews
 	$api->get('reviews', 'App\Http\Controllers\ReviewController@index');

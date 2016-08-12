@@ -111,7 +111,7 @@ class Geolocation extends Model
         $information['name'] = $this->name;
         $information['description'] = $this->description;
         $information['locationInfo'] = $this->location;
-        $information['images'] = $this->pictures;
+        $information['image'] = $this->pictures->first();
         $information['geolocationID'] = $this->geolocationID;
         return $information;
     }
