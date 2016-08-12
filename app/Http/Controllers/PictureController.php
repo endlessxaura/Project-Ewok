@@ -105,7 +105,8 @@ class PictureController extends Controller
         //POST: returns the specific picture asked for
         $picture = Picture::find($id);
         if($picture != null){
-            return $picture;
+            $image = $picture->getImagePath();
+            return response()->download($image);
         }
         else{
             return Responses::DoesNotExist();

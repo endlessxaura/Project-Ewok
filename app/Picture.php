@@ -2,6 +2,8 @@
 
 namespace App;
 
+use File;
+use Response;
 use Illuminate\Database\Eloquent\Model;
 
 class Picture extends Model
@@ -17,5 +19,10 @@ class Picture extends Model
     //Relationships
     public function attached(){
         return $this->morphTo();
+    }
+
+    //Functions
+    public function getImagePath(){
+        return storage_path() . "/app/" . $this->filePath;
     }
 }
