@@ -128,17 +128,15 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {        
-        //PRE: $request may contain a comment and geolocationID
+        //PRE: $request may contain a comment
         //     $request may contain rating (0 to 5)
         //      The user MUST own the review
         //POST: stores the specified review in the database
         $review = Review::find($id);
         $userID = Auth::user()->userID;
-        $previousReview = null;
         if($review != null){
             if($review->userID == $userID){
                 if($request->input('rating', $review->rating) <= 5 && $request->input('rating', $review->rating) >= 0){
-                    $review->geolocationID = $request->input('geolocationID');
                     $review->comment = $request->input('comment', $review->comment);
                     $review->rating = $request->input('rating', $review->rating);
                     $review->save();

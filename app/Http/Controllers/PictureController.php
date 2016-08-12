@@ -54,7 +54,7 @@ class PictureController extends Controller
     {
         //PRE: $request MUST contain the following
         //      image (the file being uploaded)
-        //      attachedModel (model being attached to, eg. App\Farm)
+        //      attachedModel (model being attached to, eg. farm)
         //      attachedID = the ID of the attached model
         //POST: stores the picture in the DB
         $validator = Validator::make($request->all(), [
@@ -63,6 +63,11 @@ class PictureController extends Controller
             'attachedID' => 'required|integer'
             ]);
         if(!$validator->fails() && $request->hasFile('image') && $request->file('image')->isValid()){
+            //Formatting attached model
+            $attachedModel = $request->input('attachedModel');
+            $attachedModel = ucfirst($attachedModel);
+            $atachedModel = "App/" . $attachedModel;
+
             //Creating the model
             $picture = Picture::create([
                 'attached_id' => $request->input('attachedID'),
@@ -75,7 +80,7 @@ class PictureController extends Controller
             if($attachedItem == null){
                 return Responses::BadRequest();
             }
-            $modelName = substr($request->input('attachedModel'), 4);
+            $modelName = substr($attachedModel, 4);
             $fileName = $modelName . "/" . $attachedItem->getKey() . '/' . time() . $file->getClientOriginalName();
 
             //Storing the image
@@ -106,7 +111,7 @@ class PictureController extends Controller
         $picture = Picture::find($id);
         if($picture != null){
             $image = $picture->getImagePath();
-            return response()->download($image);
+            return response()->file($image);
         }
         else{
             return Responses::DoesNotExist();
