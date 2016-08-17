@@ -21,11 +21,11 @@ class AuthenticateController extends Controller
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->json(['error' => 'invalid credentials'], 401);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json(['error' => 'could not create token'], 500);
         }
 
         // all good so return the token
@@ -41,7 +41,8 @@ class AuthenticateController extends Controller
             ]);
 
         if($validator->fails()){
-            return response()->json(['error' => 'registration failed'], 400);
+            $messages = $validator->errors();
+            return response()->json(['error' => $messages->first()], 400);
         }
 
         User::create([
@@ -81,20 +82,20 @@ class AuthenticateController extends Controller
         try {
 
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['error' => 'user_not_found'], 404);
+                return response()->json(['error' => 'user not found'], 404);
             }
 
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
-            return response()->json(['error' => 'token_expired'], $e->getStatusCode());
+            return response()->json(['error' => 'token expired'], $e->getStatusCode());
 
         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
 
-            return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
+            return response()->json(['error' => 'token invalid'], $e->getStatusCode());
 
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
-            return response()->json(['error' => 'token_absent'], $e->getStatusCode());
+            return response()->json(['error' => 'token absent'], $e->getStatusCode());
 
         }
 

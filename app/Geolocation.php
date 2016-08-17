@@ -31,6 +31,7 @@ class Geolocation extends Model
     public function pictures(){
         return $this->morphMany('App\Picture', 'attached');
     }
+
     //Functions
     public function hasAttached(){
         //POST: returns true if the geolocation has something attached, false otherwise
@@ -113,6 +114,7 @@ class Geolocation extends Model
         $information['locationInfo'] = $this->location;
         $information['image'] = $this->pictures->first();
         $information['geolocationID'] = $this->geolocationID;
+        $information['averageRating'] = $this->averageRating;
         return $information;
     }
 

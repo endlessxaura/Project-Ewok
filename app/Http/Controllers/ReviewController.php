@@ -60,7 +60,8 @@ class ReviewController extends Controller
         //PRE: $request MUST contain a rating (0 to 5) and geolocationID
         //     $request may contain comment
         //      The user cannot have a review for that geolocation already
-        //POST: stores the specified review in the database
+        //POST: stores the specified review in the database and recomputes the average
+        //      rating for the geolocation
         $userID = Auth::user()->userID;
         $previousReview = Review::where('userID', '=', $userID)
             ->where('geolocationID', '=', $request->input('geolocationID'))
@@ -74,6 +75,18 @@ class ReviewController extends Controller
                     $review->comment = $request->input('comment');
                     $review->rating = $request->input('rating', 0);
                     $review->save();
+                    $geolocation = $review->geolocation;
+                    $geoReviews = $geolocation->reviews;
+                    $totalCount = 0;
+                    $totalRating = 0;
+                    foreach($geoReviews as $geoReview){
+                        $totalCount += 1;
+                        $totalRating = $geoReview->rating;
+                    }
+                    if($totalCount != 0){
+                        $geolocation->averageRating = $totalRating / $totalCount;
+                    }        
+                    $geolocation->save();
                     return Responses::Created($review->reviewID);  
                 }
                 else{
@@ -132,6 +145,7 @@ class ReviewController extends Controller
         //     $request may contain rating (0 to 5)
         //      The user MUST own the review
         //POST: stores the specified review in the database
+        //      and recomputes geolocations average rating
         $review = Review::find($id);
         $userID = Auth::user()->userID;
         if($review != null){
@@ -140,6 +154,18 @@ class ReviewController extends Controller
                     $review->comment = $request->input('comment', $review->comment);
                     $review->rating = $request->input('rating', $review->rating);
                     $review->save();
+                    $geolocation = $review->geolocation;
+                    $geoReviews = $geolocation->reviews;
+                    $totalCount = 0;
+                    $totalRating = 0;
+                    foreach($geoReviews as $geoReview){
+                        $totalCount += 1;
+                        $totalRating = $geoReview->rating;
+                    }
+                    if($totalCount != 0){
+                        $geolocation->averageRating = $totalRating / $totalCount;
+                    }        
+                    $geolocation->save();
                     return Responses::Updated();
                 }
                 else{
@@ -164,12 +190,25 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         //PRE: The user MUST own the review
-        //POST: deletes the review with a matching ID
+        //POST: deletes the review with a matching ID and
+        //      recomputes geolocations average rating
         $review = Review::find($id);
         $userID = Auth::user()->userID;
         if($review != null){           
             if($review->userID == $userID){
                 $review->delete();
+                $geolocation = $review->geolocation;
+                $geoReviews = $geolocation->reviews;
+                $totalCount = 0;
+                $totalRating = 0;
+                foreach($geoReviews as $geoReview){
+                    $totalCount += 1;
+                    $totalRating = $geoReview->rating;
+                }
+                if($totalCount != 0){
+                    $geolocation->averageRating = $totalRating / $totalCount;
+                }        
+                $geolocation->save();
                 return Responses::Updated();
             }
             else{

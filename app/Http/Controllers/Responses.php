@@ -14,7 +14,7 @@ class Responses{
 	}
 
 	public static function Created($id = 0){
-		return new Response(['message' => 'The object was created', 'ID' => $id], 201);
+		return new Response(['ID' => $id], 201);
 	}
 
 	public static function Updated(){
